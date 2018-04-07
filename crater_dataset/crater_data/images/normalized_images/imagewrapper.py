@@ -1,3 +1,6 @@
+"""
+Wrapper class to save names of images files
+"""
 import cv2 as cv
 
 class ImageWrapper:
