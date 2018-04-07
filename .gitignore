@@ -4,12 +4,12 @@ __pycache__/
 *$py.class
 
 # C extensions
-*.so
-*.png
-*.jpeg
-*.jpg
-*.pgm
-*.csv
+#*.so
+#*.png
+#*.jpeg
+#*.jpg
+#*.pgm
+#*.csv
 
 
 # Distribution / packaging
