@@ -1,0 +1,52 @@
+############################# BASICS #############################
+#
+#  - There are 3 steps for modifying/syncing with the "origin" (the files on
+#    https://github.com)
+#
+#    1) STAGING: recognizing new files and changes to existing files
+#
+#    2) COMMITTING: Committing those changes to a "version"
+#
+#    3) PUSH/PULLING: Pulling other people's changes to your local "repo"
+#                     Pushing your own changes to the origin
+#
+
+# Check if you have git installed
+git --version
+
+# Check if you have any new files/changes made, and whether you're synced with
+# the "origin"
+git status
+
+# Show any changes you made
+git diff
+
+# Add files/changes to staging (files must be staged before they're committed)
+git add <list of your files>
+
+# Add every change you made to the repo
+git add -A
+
+# Remove a <file> from tracking
+git reset <file>
+
+# Commit changes to a version, you need to add a message to say what you did
+git commit -m "<your message>"
+
+# Pull the most recent version from the remote reop
+git pull origin master
+
+# Push your changes to the remote repo
+git push origin master
+
+# Clone a remote repo (you already did this)
+git clone <url> </local/file/path/cloned/to/>
+
+
+############################# ADVANCED #############################
+#
+#   There's some other stuff we might not end up using but if we do
+#   We can add it here
+#
+#   For instance, if we royally screw something up then we can easily
+#   revert back to the last commit that worked
