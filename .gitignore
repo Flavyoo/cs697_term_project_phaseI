@@ -9,6 +9,7 @@ __pycache__/
 #*.jpg
 #*.pgm
 #*.csv
+*.pyc
 paths.py
 
 
