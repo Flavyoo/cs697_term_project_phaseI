@@ -10,7 +10,7 @@ resized into 200 x 200 pixels with added padding.
 import cv2 as cv
 from imagewrapper import ImageWrapper
 # import absolute paths to image file sources and destinations
-# create your paths file in this directory
+# create your paths.py file in this directory if needed.
 from paths import *
 import os
 
