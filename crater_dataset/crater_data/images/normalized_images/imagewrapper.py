@@ -1,5 +1,5 @@
 """
-Wrapper class to save names of images files
+Wrapper class to save names of image files
 """
 import cv2 as cv
 
