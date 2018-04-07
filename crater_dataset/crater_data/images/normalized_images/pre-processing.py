@@ -9,18 +9,15 @@ resized into 200 x 200 pixels with added padding.
 """
 import cv2 as cv
 from imagewrapper import ImageWrapper
+# import absolute paths to image file sources and destinations
+# create your paths file in this directory
+from paths import *
 import os
 
 
 BLUE = [255, 0, 0]
 NEW_SIZE = 200
 # REPLACE SRC1, DEST1, SRC2, and DEST2 with your absolute path to the directories
-
-SRC1  = "/Users/flavioandrade/Desktop/Homework/480_Big_Data/Project/cs697_term_project_phaseI/crater_dataset/crater_data/images/tile3_24/crater"
-DEST1 = "/Users/flavioandrade/Desktop/Homework/480_Big_Data/Project/cs697_term_project_phaseI/crater_dataset/crater_data/images/normalized_images/crater/"
-
-SRC2  = "/Users/flavioandrade/Desktop/Homework/480_Big_Data/Project/cs697_term_project_phaseI/crater_dataset/crater_data/images/tile3_24/non-crater"
-DEST2 = "/Users/flavioandrade/Desktop/Homework/480_Big_Data/Project/cs697_term_project_phaseI/crater_dataset/crater_data/images/normalized_images/non-crater/"
 
 def paddingMakeborder(file_name, path):
     image = ImageWrapper(file_name, path)

@@ -9,6 +9,7 @@ __pycache__/
 #*.jpg
 #*.pgm
 #*.csv
+paths.py
 
 
 # Distribution / packaging
