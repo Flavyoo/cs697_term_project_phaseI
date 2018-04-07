@@ -5,6 +5,7 @@ Flavio Andrade
 This program normalizes the size of the images to be fed into the neural
 network. Crater and non-crater images are in different sizes and are then
 resized into 200 x 200 pixels with added padding.
+
 """
 import cv2 as cv
 from imagewrapper import ImageWrapper
