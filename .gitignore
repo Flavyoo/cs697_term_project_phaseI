@@ -12,6 +12,8 @@ __pycache__/
 *.pyc
 paths.py
 
+# Apple DS_Store
+*.DS_Store
 
 # Emacs annoyingness
 *~
