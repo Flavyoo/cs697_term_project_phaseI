@@ -13,7 +13,7 @@ Copied from mnist_average_darkness.py
 
 # My libraries
 import mnist_loader
-from network import Network
+from crater_network import Network
 
 def main():
 
@@ -25,9 +25,9 @@ def main():
 
     # Make the network
     print "Making Network...."
-    netwk = Network([28*28,15,10])
+    netwk = Network([28*28,30,10])
     print "Training the Network...."
-    netwk.SGD(training_data, epochs=5, mini_batch_size=1000, eta=0.01)
+    netwk.SGD(training_data, epochs=5, mini_batch_size=100, eta=0.01)
 
 
     # testing phase: see how many of the test images are classified
