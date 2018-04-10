@@ -10,7 +10,8 @@ __pycache__/
 #*.pgm
 #*.csv
 *.pyc
-paths.py
+#paths.py
+/data/
 
 # Apple Garbage
 *.DS_Store
@@ -109,3 +110,4 @@ ENV/
 
 # mypy
 .mypy_cache/
+#*.pkl
