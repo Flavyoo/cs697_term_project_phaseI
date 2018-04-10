@@ -16,6 +16,9 @@ paths.py
 # Emacs annoyingness
 *~
 
+# Emacs annoyingness
+*~
+
 # Distribution / packaging
 .Python
 build/
