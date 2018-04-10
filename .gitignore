@@ -10,7 +10,7 @@ __pycache__/
 #*.pgm
 #*.csv
 *.pyc
-paths.py
+#paths.py
 /data/
 
 # Emacs annoyingness
@@ -110,4 +110,4 @@ ENV/
 
 # mypy
 .mypy_cache/
-*.pkl
+#*.pkl
