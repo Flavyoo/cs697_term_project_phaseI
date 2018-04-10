@@ -65,14 +65,23 @@ def load_data_wrapper():
     the training data and the validation / test data.  These formats
     turn out to be the most convenient for use in our neural network
     code."""
+
+    # return the training_data, validation_data and test_data
     tr_d, va_d, te_d = load_data()
+    # loop through input images in training data - at location 0
+    # transforms the image into a column vector of length 784
     training_inputs = [np.reshape(x, (784, 1)) for x in tr_d[0]]
+    # same idea as above, but put the value of y in proper row of the vector
     training_results = [vectorized_result(y) for y in tr_d[1]]
+    # make pairs of two tuples from training_inputs and training_results
+    # i.e, vectorized image, and vectorized_results
     training_data = zip(training_inputs, training_results)
+    # same ideas as above is for below
     validation_inputs = [np.reshape(x, (784, 1)) for x in va_d[0]]
     validation_data = zip(validation_inputs, va_d[1])
     test_inputs = [np.reshape(x, (784, 1)) for x in te_d[0]]
     test_data = zip(test_inputs, te_d[1])
+    # return the data as two tuples consisting of vectorized data
     return (training_data, validation_data, test_data)
 
 def vectorized_result(j):
@@ -80,6 +89,19 @@ def vectorized_result(j):
     position and zeroes elsewhere.  This is used to convert a digit
     (0...9) into a corresponding desired output from the neural
     network."""
+    """
+    # ex when j = 2
+    array([[ 0.],
+       [ 0.],
+       [ 1.],
+       [ 0.],
+       [ 0.],
+       [ 0.],
+       [ 0.],
+       [ 0.],
+       [ 0.],
+       [ 0.]])
+    """
     e = np.zeros((10, 1))
     e[j] = 1.0
     return e

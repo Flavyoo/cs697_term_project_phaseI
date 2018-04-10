@@ -11,7 +11,10 @@ __pycache__/
 #*.csv
 *.pyc
 paths.py
+/data/
 
+# Emacs annoyingness
+*~
 
 # Distribution / packaging
 .Python
@@ -104,3 +107,4 @@ ENV/
 
 # mypy
 .mypy_cache/
+*.pkl
