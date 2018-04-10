@@ -131,7 +131,7 @@ class Network(object):
         detect_rate = TP / (TP + FN)
         false_rate = FP / (TP + FP)
         quality_rate = TP / (TP+FP+FN)
-        return TP, FP, FN, detect_rate, false_rate, quality_rate
+        return TP, FP, FN, float(detect_rate), float(false_rate), float(quality_rate)
 
     def cost_derivative(self, output_activations, y):
         """Return the vector of partial derivatives \partial C_x /
