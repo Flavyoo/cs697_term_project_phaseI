@@ -37,7 +37,7 @@ def main():
     eval = netwk.evaluate(validation_data)
 
 
-    print float(eval)/len(validation_data)
+    print eval
 
 
 if __name__ == "__main__":
