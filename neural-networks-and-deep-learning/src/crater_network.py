@@ -125,13 +125,19 @@ class Network(object):
         test_results = [(np.argmax(self.feedforward(x)), y)
                         for (x, y) in test_data]
 
-        TP = sum(int(x == 1) and int(y == 1) for (x, y) in test_results)
+        TP = sum(int(x == y) for (x, y) in test_results)
+        print "TP = %s" % TP
+
         FP = sum(int(x == 1) and int(y == 0) for (x, y) in test_results)
+        print "FP = %s" % FP
+
         FN = sum(int(x == 0) and int(y == 1) for (x, y) in test_results)
-        detect_rate = TP / (TP + FN)
-        false_rate = FP / (TP + FP)
-        quality_rate = TP / (TP+FP+FN)
-        return TP, FP, FN, float(detect_rate), float(false_rate), float(quality_rate)
+        print "FN = %s" % FN
+
+        detect_rate = float(TP) / float(TP + FN)
+        false_rate = float(FP) / float(TP + FP)
+        quality_rate = float(TP) / float(TP+FP+FN)
+        return TP, FP, FN, detect_rate, false_rate, quality_rate
 
     def cost_derivative(self, output_activations, y):
         """Return the vector of partial derivatives \partial C_x /
