@@ -9,15 +9,15 @@ resized into 200 x 200 pixels with added padding.
 """
 import cv2 as cv
 from imagewrapper import ImageWrapper
-# import absolute paths to image file sources and destinations
-# create your paths.py file in this directory if needed.
-from paths import *
 import os
 
-
+THIS_DIR = os.path.dirname(__file__)
 BLUE = [255, 0, 0]
 NEW_SIZE = 200
 # REPLACE SRC1, DEST1, SRC2, and DEST2 with your absolute path to the directories
+CRATER = os.path.join(THIS_DIR, 'crater/')
+NON_CRATER = os.path.join(THIS_DIR, 'non-cratercrater/')
+DEST = os.path.join(THIS_DIR, 'test_out/')
 
 def paddingMakeborder(file_name, path):
     image = ImageWrapper(file_name, path)
@@ -39,5 +39,6 @@ def readImages(src, dest):
 
 
 if __name__ == '__main__':
-    readImages(SRC1, DEST1)
-    readImages(SRC2, DEST2)
+    # readImages(SRC1, DEST1)
+    # readImages(SRC2, DEST2)
+    readImages(CRATER, DEST)
