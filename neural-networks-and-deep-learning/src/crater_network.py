@@ -16,7 +16,7 @@ import os
 
 # Third-party libraries
 import numpy as np
-from PIL import Image
+import cv2 as cv
 
 # Paths
 THIS_DIR = os.path.dirname(__file__)
@@ -174,8 +174,6 @@ def sigmoid_prime(z):
 
 def save_Image(path, name, array):
     """Save images to path"""
-    img = Image.fromarray(np.reshape((array * 255).astype('uint8'),
-                            (SIZE, SIZE)))
-    if img.mode != 'RGB':
-        img = img.convert('RGB')
-    img.save("%s/problem%s.jpg" % (path, name))
+    # Resize into a 2D array
+    shaped_arr = np.reshape((array * 255).astype('uint8'), (SIZE, SIZE))
+    cv.imwrite("%s/missed_img%s.jpg" % (path, name),shaped_arr)
