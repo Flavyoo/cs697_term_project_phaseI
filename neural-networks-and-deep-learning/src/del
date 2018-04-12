@@ -1,0 +1,4 @@
+#!/bin/bash
+rm -rf FP/
+rm -rf FN/
+mkdir FP FN
