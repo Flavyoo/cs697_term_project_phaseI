@@ -111,3 +111,6 @@ ENV/
 # mypy
 .mypy_cache/
 #*.pkl
+crater_dataset/crater_data/images/normalized_images/paths.py
+crater_dataset/crater_data/images/normalized_images/data.pkl
+crater_dataset/crater_data/images/normalized_images/image.txt

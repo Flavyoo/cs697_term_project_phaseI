@@ -1,16 +1,17 @@
-import csv 
+import csv
 import os
 import cv2 as cv
 import scipy
 import matplotlib as img
 from PIL import Image
 import matplotlib.pyplot as plt
-import matplotlib.cm 
+import matplotlib.cm
 import numpy as np
- 
+
 def average(pixel):
     return np.average(pixel)
-def load(): 
+    
+def load():
 	s = "normalized_images/crater"
 	t = os.listdir(s)
 	#print (t)
@@ -19,11 +20,11 @@ def load():
 	leng = len(t)
 	np.random.shuffle(t)
 	lengc = int(leng * 70 / 100)
-	
+
 	#print (leng)
 	#non-crater
 
-    #image = cv.imread("TE_tile3_24_001.jpg") 
+    #image = cv.imread("TE_tile3_24_001.jpg")
 	grey = np.zeros((200, 200))
 	tr_d = []
 	cr_val=[]
@@ -57,11 +58,11 @@ def load():
 	leng = len(t1)
 	np.random.shuffle(t1)
 	lengnc = int(leng * 70 / 100)
-	
+
 	#print (leng)
 	#non-crater
 
-    #image = cv.imread("TE_tile3_24_001.jpg") 
+    #image = cv.imread("TE_tile3_24_001.jpg")
 	grey = np.zeros((200, 200))
 
 
@@ -79,7 +80,7 @@ def load():
 		cr_val += [0]
 	#print (tr_d,len(tr_d))
 	print ( len(cr_val))
-	
+
 	header = []
 	with open('training_data.csv','w',newline='') as f:
 		twriter = csv.writer(f)

@@ -31,6 +31,7 @@ def readImagesFromPath(src, label):
     txt = open('image.txt', 'r+')
     all_images = []
     labels = []
+    # 70% crater for training set
     for image_file in range(tsl):
         image = cv.imread(src[0] + crater_files[image_file])
         # convert to grayscale
@@ -42,6 +43,7 @@ def readImagesFromPath(src, label):
             all_images = np.append(all_images, image, axis=0)
         labels.append(label[0])
 
+    # 70 % non crater for training set
     for image_file in range(ntsl):
         image = cv.imread(src[1] + non_crater_files[image_file])
         # convert to grayscale
@@ -57,7 +59,7 @@ def readImagesFromPath(src, label):
     all_test_images = []
     all_test_labels = []
 
-    # data for the testing set
+    # data for the testing set, 30% crater test
     for image_file in range(tsl, leng):
         image = cv.imread(src[0] + crater_files[image_file])
         # convert to grayscale
@@ -69,6 +71,7 @@ def readImagesFromPath(src, label):
             all_test_images = np.append(all_test_images, image, axis=0)
         all_test_labels.append(label[0])
 
+    # 30% for non crater for testing
     for image_file in range(ntsl, nleng):
         image = cv.imread(src[1] + non_crater_files[image_file])
         # convert to grayscale
@@ -80,12 +83,13 @@ def readImagesFromPath(src, label):
     test_data = (all_test_images, all_test_labels)
     all_data = (traing_data, test_data)
 
+    #all_data = [(all_images, labels), (all_test_images, all_test_labels)]
+
     my_file = open('data.pkl', 'wb')
     pickle.dump(all_data, my_file)
     my_file.close()
 
     # uncomment if you want to see the data as a text file
-
     """
     my_file = open('data.pkl', 'rb')
     loaded_file = (pickle.load(my_file))
