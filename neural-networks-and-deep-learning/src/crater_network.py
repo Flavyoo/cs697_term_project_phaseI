@@ -12,9 +12,20 @@ and omits many desirable features.
 #### Libraries
 # Standard library
 import random
+import os
 
 # Third-party libraries
 import numpy as np
+from PIL import Image
+
+# Paths
+THIS_DIR = os.path.dirname(__file__)
+TP_PATH = THIS_DIR + '/TP'
+FP_PATH = THIS_DIR + '/FP'
+FN_PATH = THIS_DIR + '/FN'
+
+# Size of Images
+SIZE = 28
 
 class Network(object):
 
@@ -125,14 +136,30 @@ class Network(object):
         test_results = [(np.argmax(self.feedforward(x)), y)
                         for (x, y) in test_data]
 
-        TP = sum(int(x == y) for (x, y) in test_results)
-        print "TP = %s" % TP
+        TP = FP = FN = count = 0
+        for ((x, y), (image, gt)) in zip(test_results, test_data):
+            count += 1
+            if (x == y):
+                TP += 1
+                save_Image(TP_PATH, count, image)
+                # if TP == 1:
+                #     exit()
+            elif x == 1 and y == 0:
+                FP += 1
+                save_Image(FP_PATH, count, image)
+            else:
+                FN += 1
+                save_Image(FP_PATH, count, image)
 
-        FP = sum(int(x == 1) and int(y == 0) for (x, y) in test_results)
-        print "FP = %s" % FP
 
-        FN = sum(int(x == 0) and int(y == 1) for (x, y) in test_results)
-        print "FN = %s" % FN
+        # TP = sum(int(x == y) for (x, y) in test_results)
+        # print "TP = %s" % TP
+        #
+        # FP = sum(int(x == 1) and int(y == 0) for (x, y) in test_results)
+        # print "FP = %s" % FP
+        #
+        # FN = sum(int(x == 0) and int(y == 1) for (x, y) in test_results)
+        # print "FN = %s" % FN
 
         detect_rate = float(TP) / float(TP + FN)
         false_rate = float(FP) / float(TP + FP)
@@ -152,3 +179,11 @@ def sigmoid(z):
 def sigmoid_prime(z):
     """Derivative of the sigmoid function."""
     return sigmoid(z)*(1-sigmoid(z))
+
+def save_Image(path, name, array):
+    """Save images to path"""
+    img = Image.fromarray(np.reshape((array * 255).astype('uint8'),
+                            (SIZE, SIZE)))
+    if img.mode != 'RGB':
+        img = img.convert('RGB')
+    img.save("%s/problem%s.jpg" % (path, name))

@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 """
 run_test_network.py
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -43,7 +45,7 @@ def main():
     print "Making Network...."
     netwk = Network([28*28,30,10])
     print "Training the Network...."
-    netwk.SGD(training_data, EPOCHS, MB_SIZE, ETA)
+    netwk.SGD(training_data, EPOCHS, MB_SIZE, ETA, test_data=validation_data)
 
 
     # testing phase: see how many of the test images are classified

@@ -4,13 +4,14 @@ __pycache__/
 
 # C extensions
 #*.so
-#*.png
+*.png
 #*.jpeg
-#*.jpg
+*.jpg
 #*.pgm
 #*.csv
 *.pyc
 paths.py
+del
 
 # Apple DS_Store
 *.DS_Store
