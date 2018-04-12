@@ -85,6 +85,7 @@ def readImagesFromPath(src, label):
     my_file.close()
 
     # uncomment if you want to see the data as a text file
+
     """
     my_file = open('data.pkl', 'rb')
     loaded_file = (pickle.load(my_file))
