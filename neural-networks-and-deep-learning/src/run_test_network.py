@@ -22,7 +22,7 @@ from crater_network import Network
 # Default settings
 EPOCHS = 5
 MB_SIZE = 1000
-ETA = 1
+ETA = .1
 HIDDEN_LAYER = 30
 
 if len(args) > 1:
