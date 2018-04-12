@@ -20,7 +20,6 @@ from PIL import Image
 
 # Paths
 THIS_DIR = os.path.dirname(__file__)
-TP_PATH = THIS_DIR + '/TP'
 FP_PATH = THIS_DIR + '/FP'
 FN_PATH = THIS_DIR + '/FN'
 
@@ -45,6 +44,7 @@ class Network(object):
         self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
         self.weights = [np.random.randn(y, x)
                         for x, y in zip(sizes[:-1], sizes[1:])]
+        self.validating = False
 
     def feedforward(self, a):
         """Return the output of the network if ``a`` is input."""
@@ -62,7 +62,9 @@ class Network(object):
         network will be evaluated against the test data after each
         epoch, and partial progress printed out.  This is useful for
         tracking progress, but slows things down substantially."""
-        if test_data: n_test = len(test_data)
+        if test_data:
+            n_test = len(test_data)
+            self.validating = True # Don't write to TP, FN, FP when validating
         n = len(training_data)
         for j in xrange(epochs):
             random.shuffle(training_data)
@@ -72,10 +74,11 @@ class Network(object):
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
             if test_data:
-                print "Epoch {0}: {1} / {2}".format(
-                    j, self.evaluate(test_data), n_test)
+                print "Epoch({0}) validation: {1}".format(
+                    j, self.evaluate(test_data))
             else:
                 print "Epoch {0} complete".format(j)
+        self.validating = False # Reset validating
 
     def update_mini_batch(self, mini_batch, eta):
         """Update the network's weights and biases by applying
@@ -136,30 +139,19 @@ class Network(object):
         test_results = [(np.argmax(self.feedforward(x)), y)
                         for (x, y) in test_data]
 
+        # Check for and keep track of TP's FP's and FN's
+        # Write FP's and FN's to a special directories
         TP = FP = FN = count = 0
         for ((x, y), (image, gt)) in zip(test_results, test_data):
             count += 1
             if (x == y):
                 TP += 1
-                save_Image(TP_PATH, count, image)
-                # if TP == 1:
-                #     exit()
             elif x == 1 and y == 0:
                 FP += 1
-                save_Image(FP_PATH, count, image)
+                if not self.validating: save_Image(FP_PATH, count, image)
             else:
                 FN += 1
-                save_Image(FP_PATH, count, image)
-
-
-        # TP = sum(int(x == y) for (x, y) in test_results)
-        # print "TP = %s" % TP
-        #
-        # FP = sum(int(x == 1) and int(y == 0) for (x, y) in test_results)
-        # print "FP = %s" % FP
-        #
-        # FN = sum(int(x == 0) and int(y == 1) for (x, y) in test_results)
-        # print "FN = %s" % FN
+                if not self.validating: save_Image(FN_PATH, count, image)
 
         detect_rate = float(TP) / float(TP + FN)
         false_rate = float(FP) / float(TP + FP)
