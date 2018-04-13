@@ -1,5 +1,5 @@
 """
-network.py
+crater_network.py
 ~~~~~~~~~~
 
 A module to implement the stochastic gradient descent learning
@@ -9,12 +9,22 @@ simple, easily readable, and easily modifiable.  It is not optimized,
 and omits many desirable features.
 """
 
-# Libraries
+#### Libraries
 # Standard library
 import random
+import os
 
 # Third-party libraries
 import numpy as np
+import cv2 as cv
+
+# Paths
+THIS_DIR = os.path.dirname(__file__)
+FP_PATH = THIS_DIR + '/FP'
+FN_PATH = THIS_DIR + '/FN'
+
+# Size of Images
+SIZE = 28
 
 class Network(object):
 
@@ -29,15 +39,12 @@ class Network(object):
         layer is assumed to be an input layer, and by convention we
         won't set any biases for those neurons, since biases are only
         ever used in computing the outputs from later layers."""
-        # sizes contains number of layers in network
         self.num_layers = len(sizes)
-        # layers
         self.sizes = sizes
-        # exclude the first layer and creates y random numbers for the other layers
         self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
-        # two-d array of random numbers
         self.weights = [np.random.randn(y, x)
                         for x, y in zip(sizes[:-1], sizes[1:])]
+        self.validating = False
 
     def feedforward(self, a):
         """Return the output of the network if ``a`` is input."""
@@ -55,18 +62,23 @@ class Network(object):
         network will be evaluated against the test data after each
         epoch, and partial progress printed out.  This is useful for
         tracking progress, but slows things down substantially."""
-        if test_data: n_test = len(test_data)
+        if test_data:
+            n_test = len(test_data)
+            self.validating = True # Don't write to TP, FN, FP when validating
         n = len(training_data)
         for j in xrange(epochs):
             random.shuffle(training_data)
-            mini_batches = [training_data[k:k+mini_batch_size] for k in xrange(0, n, mini_batch_size)]
+            mini_batches = [
+                training_data[k:k+mini_batch_size]
+                for k in xrange(0, n, mini_batch_size)]
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
             if test_data:
-                print "Epoch {0}: {1} / {2}".format(
-                    j, self.evaluate(test_data), n_test)
+                print "Epoch({0}) validation: {1}".format(
+                    j, self.evaluate(test_data))
             else:
                 print "Epoch {0} complete".format(j)
+        self.validating = False # Reset validating
 
     def update_mini_batch(self, mini_batch, eta):
         """Update the network's weights and biases by applying
@@ -92,8 +104,6 @@ class Network(object):
         nabla_b = [np.zeros(b.shape) for b in self.biases]
         nabla_w = [np.zeros(w.shape) for w in self.weights]
         # feedforward
-
-        # Grey-scale values for each pixel
         activation = x
         activations = [x] # list to store all the activations, layer by layer
         zs = [] # list to store all the z vectors, layer by layer
@@ -128,7 +138,25 @@ class Network(object):
         neuron in the final layer has the highest activation."""
         test_results = [(np.argmax(self.feedforward(x)), y)
                         for (x, y) in test_data]
-        return sum(int(x == y) for (x, y) in test_results)
+
+        # Check for and keep track of TP's FP's and FN's
+        # Write FP's and FN's to a special directories
+        TP = FP = FN = count = 0
+        for ((x, y), (image, gt)) in zip(test_results, test_data):
+            count += 1
+            if (x == y):
+                TP += 1
+            elif x == 1 and y == 0:
+                FP += 1
+                if not self.validating: save_Image(FP_PATH, count, image)
+            else:
+                FN += 1
+                if not self.validating: save_Image(FN_PATH, count, image)
+
+        detect_rate = float(TP) / float(TP + FN)
+        false_rate = float(FP) / float(TP + FP)
+        quality_rate = float(TP) / float(TP+FP+FN)
+        return TP, FP, FN, detect_rate, false_rate, quality_rate
 
     def cost_derivative(self, output_activations, y):
         """Return the vector of partial derivatives \partial C_x /
@@ -143,3 +171,9 @@ def sigmoid(z):
 def sigmoid_prime(z):
     """Derivative of the sigmoid function."""
     return sigmoid(z)*(1-sigmoid(z))
+
+def save_Image(path, name, array):
+    """Save images to path"""
+    # Resize into a 2D array
+    shaped_arr = np.reshape((array * 255).astype('uint8'), (SIZE, SIZE))
+    cv.imwrite("%s/missed_img%s.jpg" % (path, name),shaped_arr)

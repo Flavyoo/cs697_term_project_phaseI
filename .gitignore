@@ -4,9 +4,9 @@ __pycache__/
 
 # C extensions
 #*.so
-#*.png
+*.png
 #*.jpeg
-#*.jpg
+*.jpg
 #*.pgm
 #*.csv
 *.pyc
