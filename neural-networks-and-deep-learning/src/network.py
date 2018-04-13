@@ -29,9 +29,13 @@ class Network(object):
         layer is assumed to be an input layer, and by convention we
         won't set any biases for those neurons, since biases are only
         ever used in computing the outputs from later layers."""
+        # sizes contains number of layers in network
         self.num_layers = len(sizes)
+        # layers
         self.sizes = sizes
+        # exclude the first layer and creates y random numbers for the other layers
         self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
+        # two-d array of random numbers
         self.weights = [np.random.randn(y, x)
                         for x, y in zip(sizes[:-1], sizes[1:])]
 
@@ -55,9 +59,7 @@ class Network(object):
         n = len(training_data)
         for j in xrange(epochs):
             random.shuffle(training_data)
-            mini_batches = [
-                training_data[k:k+mini_batch_size]
-                for k in xrange(0, n, mini_batch_size)]
+            mini_batches = [training_data[k:k+mini_batch_size] for k in xrange(0, n, mini_batch_size)]
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
             if test_data:
