@@ -56,7 +56,7 @@ def main():
     print "Making Network...."
     netwk = Network([SIZE*SIZE,HIDDEN_LAYER,OUTPUT_LAYER], SIZE)
     print "Training the Network...."
-    netwk.SGD(training_data, EPOCHS, MB_SIZE, ETA)
+    netwk.SGD(training_data, EPOCHS, MB_SIZE, ETA, test_data=test_data)
 
 
     # testing phase: see how many of the test images are classified
