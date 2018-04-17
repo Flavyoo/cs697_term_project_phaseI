@@ -18,12 +18,17 @@ from crater_loader import load_crater_data_wrapper
 # My libraries
 import mnist_loader
 from crater_network import Network
+import numpy as np
 
+NON_CRATER_SIZE = 656
+CRATER_SIZE = 323
+
+np.set_printoptions(threshold=np.nan)
 # Default settings
 EPOCHS = 5
 MB_SIZE = 1000
 ETA = .1
-HIDDEN_LAYER = 30
+HIDDEN_LAYER = 100
 INPUT_LAYER_SIZE = 200
 
 if len(args) > 1:
@@ -44,6 +49,7 @@ def main():
 
     # Load the data
     training_data, test_data = load_crater_data_wrapper('data.pkl')
+
     #training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
 
     # training phase: compute the average darknesses for each digit,
