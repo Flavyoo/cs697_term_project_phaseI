@@ -21,7 +21,7 @@ from crater_network import Network
 
 # Image Size
 SIZE = 200
-OUTPUT_LAYER = 2
+OUTPUT_LAYER = 1
 
 # Default settings
 EPOCHS = 5
