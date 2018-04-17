@@ -145,12 +145,12 @@ class Network(object):
         TP = FP = FN = count = 0
         for ((x, y), (image, gt)) in zip(test_results, test_data):
             count += 1
-            if (x == y):
+            if x == 1 and y == 1:
                 TP += 1
             elif x == 1 and y == 0:
                 FP += 1
                 if not self.validating: self.save_Image(FP_PATH, count, image)
-            else:
+            elif x == 0 and y == 1:
                 FN += 1
                 if not self.validating: self.save_Image(FN_PATH, count, image)
 
