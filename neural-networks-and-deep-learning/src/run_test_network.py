@@ -25,8 +25,8 @@ OUTPUT_LAYER = 1
 
 # Default settings
 EPOCHS = 5
-MB_SIZE = 1000
-ETA = .1
+MB_SIZE = 16
+ETA = .9
 HIDDEN_LAYER = 30
 INPUT_LAYER_SIZE = 200
 
