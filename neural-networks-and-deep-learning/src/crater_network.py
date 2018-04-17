@@ -16,6 +16,7 @@ import os
 
 # Third-party libraries
 import numpy as np
+import scipy
 import cv2 as cv
 
 # Paths
@@ -174,8 +175,11 @@ class Network(object):
 #### Miscellaneous functions
 def sigmoid(z):
     """The sigmoid function."""
-    return 1.0/(1.0+np.exp(-z))
+    # z = np.float128(z)
+    # return 1.0/(1.0+np.exp(-z))
+    return scipy.special.expit(z)
 
 def sigmoid_prime(z):
     """Derivative of the sigmoid function."""
+    z = np.float128(z)
     return sigmoid(z)*(1-sigmoid(z))
