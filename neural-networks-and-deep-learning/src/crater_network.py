@@ -132,13 +132,19 @@ class Network(object):
             nabla_b[-l] = delta
             nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
         return (nabla_b, nabla_w)
+    
+    def decide(self, output):
+        if output[0] >= .5:
+            return 1
+        else:
+            return 0
 
     def evaluate(self, test_data):
         """Return the number of test inputs for which the neural
         network outputs the correct result. Note that the neural
         network's output is assumed to be the index of whichever
         neuron in the final layer has the highest activation."""
-        test_results = [(np.argmax(self.feedforward(x)), y)
+        test_results = [(decide(self.feedforward(x)), y)
                         for (x, y) in test_data]
 
         # Check for and keep track of TP's FP's and FN's
