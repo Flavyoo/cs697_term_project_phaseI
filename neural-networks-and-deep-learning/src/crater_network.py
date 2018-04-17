@@ -157,11 +157,10 @@ class Network(object):
                 if not self.validating: self.save_Image(FN_PATH, count, image)
             else:
                 TN += 1
-
-        detect_rate = float(TP) / float(TP + FN)
-        false_rate = float(FP) / float(TP + FP)
+        #detect_rate = float(TP) / float(TP + FN)
+        #false_rate = float(FP) / float(TP + FP)
         quality_rate = float(TP) / float(TP+FP+FN)
-        return TP, FP, FN, TN # detect_rate, false_rate, quality_rate
+        return TP, FP, FN, TN, quality_rate#, detect_rate, false_rate, quality_rate
 
     def cost_derivative(self, output_activations, y):
         """Return the vector of partial derivatives \partial C_x /
