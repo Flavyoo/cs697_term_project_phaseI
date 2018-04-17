@@ -54,6 +54,11 @@ def main():
 
     # Make the network
     print "Making Network...."
+    print "Parameters: "
+    print "  Epochs  = %s" % EPOCHS
+    print "  MB_Size = %s" % MB_SIZE
+    print "  Eta     = %s" % ETA
+    print "  Hid Lyr = %s" % HIDDEN_LAYER
     netwk = Network([SIZE*SIZE,HIDDEN_LAYER,OUTPUT_LAYER], SIZE)
     print "Training the Network...."
     netwk.SGD(training_data, EPOCHS, MB_SIZE, ETA, test_data=test_data)
