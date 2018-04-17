@@ -13,6 +13,9 @@ __pycache__/
 #paths.py
 /data/
 
+# Ignore the pick
+*.pkl
+
 # Apple Garbage
 *.DS_Store
 

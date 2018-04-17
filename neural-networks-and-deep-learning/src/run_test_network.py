@@ -19,6 +19,10 @@ from crater_loader import load_crater_data_wrapper
 import mnist_loader
 from crater_network import Network
 
+# Image Size
+SIZE = 200
+OUTPUT_LAYER = 1
+
 # Default settings
 EPOCHS = 5
 MB_SIZE = 1000
@@ -43,17 +47,17 @@ def main():
     os.system("./del")
 
     # Load the data
-    # training_data, test_data = load_crater_data_wrapper('data.pkl')
-    training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
+    training_data, test_data = load_crater_data_wrapper('data.pkl')
+    #training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
 
     # training phase: compute the average darknesses for each digit,
     # based on the training data
 
     # Make the network
     print "Making Network...."
-    netwk = Network([28*28,HIDDEN_LAYER,10])
+    netwk = Network([SIZE*SIZE,HIDDEN_LAYER,OUTPUT_LAYER])
     print "Training the Network...."
-    netwk.SGD(training_data, EPOCHS, MB_SIZE, ETA, test_data=validation_data)
+    netwk.SGD(training_data, EPOCHS, MB_SIZE, ETA, test_data=test_data)
 
 
     # testing phase: see how many of the test images are classified
@@ -61,7 +65,7 @@ def main():
 
     # Evaluate results
     print "Evaluating test data..."
-    eval = netwk.evaluate(validation_data)
+    eval = netwk.evaluate(test_data)
 
     print eval
 
