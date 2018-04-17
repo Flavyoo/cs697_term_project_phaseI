@@ -43,26 +43,22 @@ def main():
     os.system("./del")
 
     # Load the data
-    # training_data, test_data = load_crater_data_wrapper('data.pkl')
-    training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
+    training_data, test_data = load_crater_data_wrapper('data.pkl')
+    #training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
 
     # training phase: compute the average darknesses for each digit,
     # based on the training data
 
     # Make the network
     print "Making Network...."
-    netwk = Network([28*28,HIDDEN_LAYER,10])
+    netwk = Network([INPUT_LAYER_SIZE * INPUT_LAYER_SIZE,HIDDEN_LAYER,1])
     print "Training the Network...."
-    netwk.SGD(training_data, EPOCHS, MB_SIZE, ETA, test_data=validation_data)
-
-
+    netwk.SGD(training_data, EPOCHS, MB_SIZE, ETA, test_data=test_data)
     # testing phase: see how many of the test images are classified
     # correctly
-
     # Evaluate results
     print "Evaluating test data..."
-    eval = netwk.evaluate(validation_data)
-
+    eval = netwk.evaluate(test_data)
     print eval
 
 
