@@ -18,30 +18,16 @@ from crater_loader import load_crater_data_wrapper
 # My libraries
 import mnist_loader
 from crater_network import Network
-import numpy as np
 
-<<<<<<< HEAD
-NON_CRATER_SIZE = 656
-CRATER_SIZE = 323
-
-np.set_printoptions(threshold=np.nan)
-# Default settings
-EPOCHS = 5
-MB_SIZE = 1000
-ETA = .1
-HIDDEN_LAYER = 100
-INPUT_LAYER_SIZE = 200
-=======
 # Image Size
 SIZE = 200
-OUTPUT_LAYER = 10
+OUTPUT_LAYER = 2
 
 # Default settings
 EPOCHS = 5
 MB_SIZE = 16
 ETA = .9
 HIDDEN_LAYER = 30
->>>>>>> ed19f21797e546c860f42516df394f7e8c9e06ee
 
 if len(args) > 1:
     if args[1] != '.': EPOCHS = int(args[1])
@@ -60,23 +46,22 @@ def main():
     os.system("./del")
 
     # Load the data
-<<<<<<< HEAD
     training_data, test_data = load_crater_data_wrapper('data.pkl')
-
     #training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
-=======
-    #training_data, test_data = load_crater_data_wrapper('data.pkl')
-    training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
->>>>>>> ed19f21797e546c860f42516df394f7e8c9e06ee
 
     # training phase: compute the average darknesses for each digit,
     # based on the training data
 
     # Make the network
     print "Making Network...."
+    print "Parameters: "
+    print "  Epochs  = %s" % EPOCHS
+    print "  MB_Size = %s" % MB_SIZE
+    print "  Eta     = %s" % ETA
+    print "  Hid Lyr = %s" % HIDDEN_LAYER
     netwk = Network([SIZE*SIZE,HIDDEN_LAYER,OUTPUT_LAYER], SIZE)
     print "Training the Network...."
-    netwk.SGD(training_data, EPOCHS, MB_SIZE, ETA, test_data=validation_data)
+    netwk.SGD(training_data, EPOCHS, MB_SIZE, ETA, test_data=test_data)
 
 
     # testing phase: see how many of the test images are classified

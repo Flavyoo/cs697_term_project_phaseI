@@ -2,7 +2,6 @@ import pickle
 import numpy as np
 
 # call this to get image data and label
-
 # take in a string filename
 def load_crater_data_wrapper(filename):
     #all_data = [(all_images, labels), (all_test_images, all_test_labels)]
