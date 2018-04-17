@@ -132,7 +132,7 @@ class Network(object):
             nabla_b[-l] = delta
             nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
         return (nabla_b, nabla_w)
-    
+
     def decide(self, output):
         if output[0] >= .5:
             return 1
@@ -163,6 +163,9 @@ class Network(object):
                 if not self.validating: self.save_Image(FN_PATH, count, image)
             else:
                 TN += 1
+
+        if TP == 0 or FP == 0 or FN == 0:
+            return TP, FP, FN, TN, '---------', '---------','---------'
         detect_rate = float(TP) / float(TP + FN)
         false_rate = float(FP) / float(TP + FP)
         quality_rate = float(TP) / float(TP+FP+FN)
