@@ -65,6 +65,8 @@ class Network(object):
         tracking progress, but slows things down substantially."""
         if test_data:
             n_test = len(test_data)
+            print "   Training data size   = %s " % len(training_data)
+            print "   Validation data size = %s " % len(test_data)
             self.validating = True # Don't write to TP, FN, FP when validating
         n = len(training_data)
         for j in xrange(epochs):
@@ -75,9 +77,8 @@ class Network(object):
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
             if test_data:
-                print "Epoch({0}) validation: {1}".format(
+                print "Epoch({0}) validation: {1}\n".format(
                     j, self.evaluate(test_data))
-                print "   Data size = %s " % len(test_data)
             else:
                 print "Epoch {0} complete".format(j)
         self.validating = False # Reset validating
