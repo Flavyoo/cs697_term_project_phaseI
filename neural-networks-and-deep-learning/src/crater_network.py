@@ -24,11 +24,11 @@ FP_PATH = THIS_DIR + '/FP'
 FN_PATH = THIS_DIR + '/FN'
 
 # Size of Images
-SIZE = 200
+
 
 class Network(object):
 
-    def __init__(self, sizes):
+    def __init__(self, sizes, image_size):
         """The list ``sizes`` contains the number of neurons in the
         respective layers of the network.  For example, if the list
         was [2, 3, 1] then it would be a three-layer network, with the
@@ -39,6 +39,7 @@ class Network(object):
         layer is assumed to be an input layer, and by convention we
         won't set any biases for those neurons, since biases are only
         ever used in computing the outputs from later layers."""
+        self.im_size = image_size
         self.num_layers = len(sizes)
         self.sizes = sizes
         self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
@@ -148,10 +149,10 @@ class Network(object):
                 TP += 1
             elif x == 1 and y == 0:
                 FP += 1
-                if not self.validating: save_Image(FP_PATH, count, image)
+                if not self.validating: self.save_Image(FP_PATH, count, image)
             else:
                 FN += 1
-                if not self.validating: save_Image(FN_PATH, count, image)
+                if not self.validating: self.save_Image(FN_PATH, count, image)
 
         detect_rate = float(TP) / float(TP + FN)
         false_rate = float(FP) / float(TP + FP)
@@ -163,6 +164,13 @@ class Network(object):
         \partial a for the output activations."""
         return (output_activations-y)
 
+    def save_Image(self, path, name, array):
+        """Save images to path"""
+        # Resize into a 2D array
+        shaped_arr = np.reshape((array * 255).astype('uint8'),
+                        (self.im_size, self.im_size))
+        cv.imwrite("%s/missed_img%s.jpg" % (path, name),shaped_arr)
+
 #### Miscellaneous functions
 def sigmoid(z):
     """The sigmoid function."""
@@ -171,9 +179,3 @@ def sigmoid(z):
 def sigmoid_prime(z):
     """Derivative of the sigmoid function."""
     return sigmoid(z)*(1-sigmoid(z))
-
-def save_Image(path, name, array):
-    """Save images to path"""
-    # Resize into a 2D array
-    shaped_arr = np.reshape((array * 255).astype('uint8'), (SIZE, SIZE))
-    cv.imwrite("%s/missed_img%s.jpg" % (path, name),shaped_arr)
