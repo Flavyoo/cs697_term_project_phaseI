@@ -14,7 +14,7 @@ Copied from mnist_average_darkness.py
 # Standard library
 from sys import argv as args
 import os
-
+from crater_loader import load_crater_data_wrapper
 # My libraries
 import mnist_loader
 from crater_network import Network
@@ -24,6 +24,7 @@ EPOCHS = 5
 MB_SIZE = 1000
 ETA = .1
 HIDDEN_LAYER = 30
+INPUT_LAYER_SIZE = 200
 
 if len(args) > 1:
     if args[1] != '.': EPOCHS = int(args[1])
@@ -42,6 +43,7 @@ def main():
     os.system("./del")
 
     # Load the data
+    # training_data, test_data = load_crater_data_wrapper('data.pkl')
     training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
 
     # training phase: compute the average darknesses for each digit,
