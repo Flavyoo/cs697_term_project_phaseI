@@ -24,7 +24,7 @@ FP_PATH = THIS_DIR + '/FP'
 FN_PATH = THIS_DIR + '/FN'
 
 # Size of Images
-SIZE = 28
+SIZE = 200
 
 class Network(object):
 
