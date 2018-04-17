@@ -20,7 +20,7 @@ import mnist_loader
 from crater_network import Network
 
 # Image Size
-SIZE = 28
+SIZE = 200
 OUTPUT_LAYER = 10
 
 # Default settings
