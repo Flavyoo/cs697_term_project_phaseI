@@ -62,7 +62,6 @@ def main():
 
     # testing phase: see how many of the test images are classified
     # correctly
-
     # Evaluate results
     print "Evaluating test data..."
     eval = netwk.evaluate(test_data)
