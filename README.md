@@ -1,3 +1,6 @@
+I JUST MADE A CHANGE
+
+
 # cs697_term_project_phaseI
 
 In this repository, you will find the crater dataset and a sample neural network that initialy designed to recognize handwritten digits. 
