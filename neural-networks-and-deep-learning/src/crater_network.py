@@ -77,6 +77,7 @@ class Network(object):
             if test_data:
                 print "Epoch({0}) validation: {1}".format(
                     j, self.evaluate(test_data))
+                print "   Data size = %s " % len(test_data)
             else:
                 print "Epoch {0} complete".format(j)
         self.validating = False # Reset validating
@@ -143,6 +144,7 @@ class Network(object):
         # Check for and keep track of TP's FP's and FN's
         # Write FP's and FN's to a special directories
         TP = FP = FN = count = 0
+        TN = 0
         for ((x, y), (image, gt)) in zip(test_results, test_data):
             count += 1
             if x == 1 and y == 1:
@@ -153,11 +155,13 @@ class Network(object):
             elif x == 0 and y == 1:
                 FN += 1
                 if not self.validating: self.save_Image(FN_PATH, count, image)
+            else:
+                TN += 1
 
         detect_rate = float(TP) / float(TP + FN)
         false_rate = float(FP) / float(TP + FP)
         quality_rate = float(TP) / float(TP+FP+FN)
-        return TP, FP, FN, detect_rate, false_rate, quality_rate
+        return TP, FP, FN, TN # detect_rate, false_rate, quality_rate
 
     def cost_derivative(self, output_activations, y):
         """Return the vector of partial derivatives \partial C_x /
@@ -174,10 +178,8 @@ class Network(object):
 #### Miscellaneous functions
 def sigmoid(z):
     """The sigmoid function."""
-    z = np.float128(z)
     return 1.0/(1.0+np.exp(-z))
 
 def sigmoid_prime(z):
     """Derivative of the sigmoid function."""
-    z = np.float128(z)
     return sigmoid(z)*(1-sigmoid(z))
