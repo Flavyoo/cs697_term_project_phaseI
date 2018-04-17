@@ -28,7 +28,6 @@ EPOCHS = 5
 MB_SIZE = 16
 ETA = .9
 HIDDEN_LAYER = 30
-INPUT_LAYER_SIZE = 200
 
 if len(args) > 1:
     if args[1] != '.': EPOCHS = int(args[1])
