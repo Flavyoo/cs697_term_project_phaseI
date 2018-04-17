@@ -10,8 +10,6 @@ from imagewrapper import ImageWrapper
 
 np.set_printoptions(threshold=np.nan)
 
-# should the crater and non crater be mixed up or separated
-# training data
 def readImagesFromPath(src, label):
 
     crater_files = os.listdir(src[0])
