@@ -38,9 +38,7 @@ if len(args) > 3:
 if len(args) > 4:
     if args[4] != '.': HIDDEN_LAYER = int(args[4])
 
-
 def main():
-
     # Preparing test directories
     print "Preparing test directories"
     os.system("./del")
