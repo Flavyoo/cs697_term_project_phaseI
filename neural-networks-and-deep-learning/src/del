@@ -13,3 +13,5 @@ fi
 if [ ! -f "scaled-data.pkl" ]
   then unzip scaled-data.pkl.zip
 fi
+
+touch results.csv
