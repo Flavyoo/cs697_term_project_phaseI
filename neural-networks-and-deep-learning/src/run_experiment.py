@@ -46,7 +46,7 @@ def main():
     os.system("./del")
 
     # Load the data
-    training_data, test_data = load_crater_data_wrapper('data.pkl')
+    training_data, test_data = load_crater_data_wrapper('scaled-data.pkl')
     #training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
 
     # training phase: compute the average darknesses for each digit,
