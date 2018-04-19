@@ -1,11 +1,9 @@
 import os
 
-def selfEvaluate(e, mb, eta, hl):
-    if mb == 1:
-        # check quality rate for 1
-        return
+
+def selfEvaluate(e, mb, eta, hl, pvqr):
     # run the program
-    prev_average_quality_rate = 0.0
+    prev_average_quality_rate = pvqr
     EPOCHS = e
     MB_SIZE = mb # powers
     ETA = eta
@@ -32,12 +30,23 @@ def selfEvaluate(e, mb, eta, hl):
     average_quality_rate = average_quality_rate / (total * 1.0)
     #if prev_quality_rate != 0.0:
     # keep changing batch size until it increases to a max but then decreases
-    if average_quality_rate > prev_average_quality_rate:
-        prev_quality_rate = average_quality_rate
+    if average_quality_rate >= prev_average_quality_rate:
+        prev_average_quality_rate = average_quality_rate
         MB_SIZE = MB_SIZE / 2
-        selfEvaluate(EPOCHS, MB_SIZE, ETA, HIDDEN_LAYER)
+        print "2"
+        print (average_quality_rate, MB_SIZE)
+        return selfEvaluate(EPOCHS, MB_SIZE, ETA, HIDDEN_LAYER, prev_average_quality_rate)
     elif average_quality_rate < prev_average_quality_rate:
-        return MB_SIZE * 2
+        print "1"
+        print (prev_average_quality_rate, MB_SIZE * 2)
+        return (prev_average_quality_rate, MB_SIZE * 2)
+    else:
+        if MB_SIZE == 1:
+            print "3"
+            return (prev_average_quality_rate, MB_SIZE * 2)
 
 
-selfEvaluate(5, 200, .01, 100)
+# def runMultipleExpirements(e, mb, eta, hl, pvqr):
+    #results = selfEvaluate(e, mb, eta, hl, pvqr)
+
+print(selfEvaluate(2, 4, 0.1, 100, 0.0))
