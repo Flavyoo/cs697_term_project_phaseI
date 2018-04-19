@@ -165,18 +165,22 @@ class Network(object):
             else:
                 TN += 1
 
-        if (TP + FN ) == 0:
-            return TP, FP, FN, TN, '---------', '---------','---------'
-        else:
-            detect_rate = float(TP) / float(TP + FN)
-        if (TP + FP ) == 0:
-            return TP, FP, FN, TN, '---------', '---------','---------'
-        else:
-            false_rate = float(FP) / float(TP + FP)
+                
         if (TP + FP + FN ) == 0:
             return TP, FP, FN, TN, '---------', '---------','---------'
         else:
             quality_rate = float(TP) / float(TP+FP+FN)
+
+        if (TP + FN ) == 0:
+            return TP, FP, FN, TN, quality_rate, '---------','---------'
+        else:
+            detect_rate = float(TP) / float(TP + FN)
+
+        if (TP + FP ) == 0:
+            return TP, FP, FN, TN, '---------', '---------','---------'
+        else:
+            false_rate = float(FP) / float(TP + FP)
+
         return TP, FP, FN, TN, quality_rate, detect_rate, false_rate
 
     def cost_derivative(self, output_activations, y):
