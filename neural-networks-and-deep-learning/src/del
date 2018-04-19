@@ -6,6 +6,6 @@ rm -rf FN/
 mkdir FP FN
 
 # Prepare
-if [ ! -f "data.pkl" ]
-  then unzip data.pkl.zip
+if [ ! -f "pad-data.pkl" ]
+  then unzip pad-data.pkl.zip
 fi
