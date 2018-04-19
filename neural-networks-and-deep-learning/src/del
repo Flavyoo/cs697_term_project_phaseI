@@ -9,3 +9,7 @@ mkdir FP FN
 if [ ! -f "data.pkl" ]
   then unzip data.pkl.zip
 fi
+
+if [ ! -f "scaled-data.pkl" ]
+  then unzip scaled-data.pkl.zip
+fi
