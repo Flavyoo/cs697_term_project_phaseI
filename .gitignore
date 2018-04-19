@@ -3,15 +3,18 @@ __pycache__/
 *$py.class
 
 # C extensions
-#*.so
+*.so
 *.png
-#*.jpeg
+*.jpeg
 *.jpg
-#*.pgm
-#*.csv
+*.pgm
+*.csv
 *.pyc
 #paths.py
 /data/
+
+# Ignore the pick
+*.pkl
 
 # Apple Garbage
 *.DS_Store
@@ -114,3 +117,4 @@ ENV/
 crater_dataset/crater_data/images/normalized_images/paths.py
 crater_dataset/crater_data/images/normalized_images/data.pkl
 crater_dataset/crater_data/images/normalized_images/image.txt
+.DS_Store

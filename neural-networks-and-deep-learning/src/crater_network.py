@@ -24,11 +24,7 @@ FP_PATH = THIS_DIR + '/FP'
 FN_PATH = THIS_DIR + '/FN'
 
 # Size of Images
-<<<<<<< HEAD
 SIZE = 200
-=======
-
->>>>>>> ed19f21797e546c860f42516df394f7e8c9e06ee
 
 class Network(object):
 
@@ -136,7 +132,7 @@ class Network(object):
             nabla_b[-l] = delta
             nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
         return (nabla_b, nabla_w)
-    
+
     def decide(self, output):
         if output[0] >= .5:
             return 1
