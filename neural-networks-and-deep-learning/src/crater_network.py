@@ -165,7 +165,7 @@ class Network(object):
             else:
                 TN += 1
 
-        if TP == 0 or FP == 0 or FN == 0:
+        if (TP + FP + FN ) == 0:
             return TP, FP, FN, TN, '---------', '---------','---------'
         detect_rate = float(TP) / float(TP + FN)
         false_rate = float(FP) / float(TP + FP)
