@@ -69,6 +69,7 @@ def main():
     # Evaluate results
     print "Evaluating test data..."
     eval = netwk.evaluate(test_data)
+    os.system("echo %s >> results.csv" % ','.join(map(str, eval)))
 
     print eval
 
