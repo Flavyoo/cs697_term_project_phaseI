@@ -166,7 +166,7 @@ class Network(object):
             else:
                 TN += 1
 
-                
+
         if (TP + FP + FN ) == 0:
             return TP, FP, FN, TN, '---------', '---------','---------'
         else:

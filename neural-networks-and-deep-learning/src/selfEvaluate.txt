@@ -1,0 +1,14 @@
+Preparing test directories
+Making Network....
+Parameters: 
+  Epochs  = 1
+  MB_Size = 200
+  Eta     = 0.01
+  Hid Lyr = 100
+Training the Network....
+   Training data size   = 685 
+   Validation data size = 295 
+Epoch(0) validation: (0, 0, 97, 198, '---------', '---------', '---------')
+
+Evaluating test data...
+(0, 0, 97, 198, '---------', '---------', '---------')
