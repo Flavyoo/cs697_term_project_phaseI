@@ -152,6 +152,7 @@ class Network(object):
         # Write FP's and FN's to a special directories
         TP = FP = FN = count = 0
         TN = 0
+        # what you got = x, what should be  = y
         for ((x, y), (image, gt)) in zip(test_results, test_data):
             count += 1
             if x == 1 and y == 1:
