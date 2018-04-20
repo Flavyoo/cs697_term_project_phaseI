@@ -17,6 +17,9 @@ __pycache__/
 # Ignore the pick
 *.pkl
 
+# Mac
+10mstat
+
 # Apple Garbage
 *.DS_Store
 
