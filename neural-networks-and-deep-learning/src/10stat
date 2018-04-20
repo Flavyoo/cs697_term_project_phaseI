@@ -1,5 +1,5 @@
 
-PROCS=$(top -n 1 | grep "run_experiment" | wc -l)
+PROCS=$(top -n 1 | grep "run_experiment" | grep "$(whoami)" | wc -l)
 echo ""
 echo "$PROCS tests still running... "
 echo ""
