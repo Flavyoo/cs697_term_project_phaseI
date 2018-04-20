@@ -1,6 +1,0 @@
-
-PROCS=$(top -l 1 | grep "Python" | grep "$(whoami)" | wc -l)
-echo ""
-echo "$PROCS tests still running... "
-echo ""
-top -l 1 | grep "Python" | grep "$(whoami)" 
