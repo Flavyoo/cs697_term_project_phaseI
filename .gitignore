@@ -19,6 +19,7 @@ __pycache__/
 
 # Mac
 10mstat
+Results/
 
 # Apple Garbage
 *.DS_Store
