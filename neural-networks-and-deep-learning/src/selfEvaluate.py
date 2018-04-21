@@ -80,7 +80,7 @@ def selfEvaluateEta(e, mb, eta, hl, qr):
         return selfEvaluateEta(EPOCHS, MB_SIZE, ETA, HIDDEN_LAYER, prev_average_quality_rate)
     elif average_quality_rate < prev_average_quality_rate:
         print "LESS THAN"
-        return (prev_average_quality_rate, ETA - 0.1)
+        return (prev_average_quality_rate, ETA - 0.05)
 
 
 
