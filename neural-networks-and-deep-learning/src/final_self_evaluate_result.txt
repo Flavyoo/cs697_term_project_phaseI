@@ -1,0 +1,39 @@
+[user07@scc src]$ python selfEvaluate.py
+/home/user07/project/neural-networks-and-deep-learning/src/crater_network.py:202: RuntimeWarning: overflow encountered in exp
+  return 1.0/(1.0+np.exp(-z))
+(0.4847631614739801, 4)
+/home/user07/project/neural-networks-and-deep-learning/src/crater_network.py:202: RuntimeWarning: overflow encountered in exp
+  return 1.0/(1.0+np.exp(-z))
+(0.5436905096206106, 2)
+(0.5436905096206106, 2)
+FINAL BATCH SIZE RESULTS
+/home/user07/project/neural-networks-and-deep-learning/src/crater_network.py:202: RuntimeWarning: overflow encountered in exp
+  return 1.0/(1.0+np.exp(-z))
+7
+(0.0, 0.15)
+GREATER THAN
+/home/user07/project/neural-networks-and-deep-learning/src/crater_network.py:202: RuntimeWarning: overflow encountered in exp
+  return 1.0/(1.0+np.exp(-z))
+7
+(0.505062492671458, 0.2)
+GREATER THAN
+/home/user07/project/neural-networks-and-deep-learning/src/crater_network.py:202: RuntimeWarning: overflow encountered in exp
+  return 1.0/(1.0+np.exp(-z))
+7
+(0.4427071219962539, 0.25)
+LESS THAN
+/home/user07/project/neural-networks-and-deep-learning/src/crater_network.py:202: RuntimeWarning: overflow encountered in exp
+  return 1.0/(1.0+np.exp(-z))
+7
+(0.5497751127686608, 100)
+GREATER THAN
+/home/user07/project/neural-networks-and-deep-learning/src/crater_network.py:202: RuntimeWarning: overflow encountered in exp
+  return 1.0/(1.0+np.exp(-z))
+7
+(0.4569271547842977, 105)
+LESS THAN
+2
+0.15
+(0.5497751127686608, 100)
+FINAL bs , eta, hiddenl  RESULTS
+[user07@scc src]$ 
