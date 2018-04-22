@@ -1,6 +1,8 @@
 #!/usr/bin/python
 from operator import attrgetter
 
+EMPTY_NUMBER = '---------'
+
 class EpochRanker(object):
     """ Stores epochs with their weights and biases, ranks them by
     quality rate and detect rate and produces the best one """
@@ -8,8 +10,9 @@ class EpochRanker(object):
         self.epochs = []
 
     def add_epoch(self, weights, biases, qr):
-        self.epochs.append(self.Epoch(weights, biases,
-                                      qr, len(self.epochs)))
+        if qr != EMPTY_NUMBER:
+            self.epochs.append(self.Epoch(weights, biases,
+                                            qr, len(self.epochs)))
 
     def best_epoch(self):
         ranked_epochs = self.__give_rankings("qr", self.epochs)

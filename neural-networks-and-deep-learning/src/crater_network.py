@@ -27,6 +27,9 @@ FN_PATH = THIS_DIR + '/FN'
 # Size of Images
 SIZE = 200
 
+#Empty number
+EMPTY_NUMBER = '---------'
+
 class Network(object):
 
     def __init__(self, sizes, image_size, wb_tuple=None):
@@ -177,17 +180,17 @@ class Network(object):
 
 
         if (TP + FP + FN ) == 0:
-            return TP, FP, FN, TN, '---------', '---------','---------'
+            return TP, FP, FN, TN, EMPTY_NUMBER, EMPTY_NUMBER,EMPTY_NUMBER
         else:
             quality_rate = float(TP) / float(TP+FP+FN)
 
         if (TP + FN ) == 0:
-            return TP, FP, FN, TN, quality_rate, '---------','---------'
+            return TP, FP, FN, TN, quality_rate, EMPTY_NUMBER,EMPTY_NUMBER
         else:
             detect_rate = float(TP) / float(TP + FN)
 
         if (TP + FP ) == 0:
-            return TP, FP, FN, TN, '---------', '---------','---------'
+            return TP, FP, FN, TN, EMPTY_NUMBER, EMPTY_NUMBER,EMPTY_NUMBER
         else:
             false_rate = float(FP) / float(TP + FP)
 
