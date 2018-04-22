@@ -1,3 +1,13 @@
+"""
+selfEvaluateQualitytRate.py
+
+Flavio Andrade, Nikith AnupKumar
+4-20-18
+
+This program is intended to find the best hyperparameter values for the
+neural network, which produces the best quality rate.
+"""
+
 import os
 
 def selfevaluateBatchSize(e, mb, eta, hl, pvqr):
@@ -81,7 +91,7 @@ def selfEvaluateEta(e, mb, eta, hl, qr):
 
 def selfEvaluateHiddenLayer(e, mb, eta, hl, qr):
     print "HIDDEN LAYER"
-    if hl == 200:
+    if hl == 50:
         return (qr, hl)
     prev_average_quality_rate = qr
     EPOCHS = e
@@ -119,7 +129,7 @@ def selfEvaluateHiddenLayer(e, mb, eta, hl, qr):
         return (prev_average_quality_rate, HIDDEN_LAYER - 5)
 
 EPOCHS = 10
-MB_SIZE = 30
+MB_SIZE = 200
 ETA = 0.15
 HIDDEN_LAYERS = 10
 bs_results = selfevaluateBatchSize(EPOCHS, MB_SIZE, ETA, HIDDEN_LAYERS, 0.0)

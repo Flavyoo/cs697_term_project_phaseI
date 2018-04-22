@@ -52,7 +52,7 @@ def readImagesFromPath(src, label, filename):
         all_images = np.append(all_images, image, axis=0)
         labels.append(label[1])
 
-    traing_data = (all_images, labels)
+    training_data = (all_images, labels)
 
     all_test_images = []
     all_test_labels = []
@@ -85,8 +85,8 @@ def readImagesFromPath(src, label, filename):
         all_test_labels.append(label[1])
 
     test_data = (all_test_images, all_test_labels)
-    all_data = (traing_data, test_data)
-    #all_data = [(all_images, labels), (all_test_images, all_test_labels)]
+    all_data = (training_data, test_data)
+    #all_data = ((all_images, labels), (all_test_images, all_test_labels))
     my_file = open(filename, 'wb')
     pickle.dump(all_data, my_file)
     my_file.close()

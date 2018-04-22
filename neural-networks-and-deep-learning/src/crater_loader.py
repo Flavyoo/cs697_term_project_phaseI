@@ -1,3 +1,19 @@
+"""
+craterLoader.py
+Flavio Andrade, Nikith AnupKumar
+4-16-18
+
+This program reads a pickle file containing training and test data.
+Each data set, training and test, is a tuple of the the respective images and their labels.
+The training set consists of 70% of the crater and 70% of the non-crater images, and the test
+data set consists of 30% of the crater and 30% of the non-crater images.
+
+After the file is read, each image from the data set is turned into a column vector
+and put into a tuple consisting of the image itself, and its label. This is done for
+the test and the training data. The final values are then returned.
+
+"""
+
 import pickle
 import numpy as np
 

@@ -1,3 +1,13 @@
+"""
+selfEvaluateDetectRate.py
+
+Flavio Andrade, Nikith AnupKumar
+4-20-18
+
+This program is intended to find the best hyperparameter values for the
+neural network, which produces the best detect rate.
+"""
+
 import os
 
 def selfevaluateBatchSize(e, mb, eta, hl, pvqr):
