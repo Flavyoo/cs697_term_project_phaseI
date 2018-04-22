@@ -46,7 +46,7 @@ if len(args) > 5:
 if len(args) > 6:
     if args[6] != '.': PICKLE_IN = "epoch.pkl"
 
-PICKLE_DIR = "PICKLES/%s" % TEST
+PICKLE_DIR = "Pickles/%s" % TEST
 os.system("mkdir -p %s" % PICKLE_DIR)
 
 def pickle_it(epoch, dir):
