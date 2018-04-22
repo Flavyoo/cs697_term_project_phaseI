@@ -12,7 +12,7 @@ MB_SIZE = 16
 ETA = .9
 HIDDEN_LAYER = 30
 NUM_TESTS = 10
-PICKLE_IN = "False"
+PICKLE_IN = ""
 
 if len(args) > 1:
     if args[1] != '.': EPOCHS = int(args[1])
@@ -25,7 +25,7 @@ if len(args) > 4:
 if len(args) > 5:
     if args[5] != '.': NUM_TESTS = int(args[5])
 if len(args) > 6:
-    if args[6] != '.': PICKLE_IN = "True"
+    if args[6] != '.': PICKLE_IN = str(args[6])
 
 os.system("rm -f results.csv")
 os.system("touch results.csv")
