@@ -13,6 +13,7 @@ __pycache__/
 *.out
 #paths.py
 /data/
+Pickles/test*
 
 # Ignore the pick
 *.pkl
