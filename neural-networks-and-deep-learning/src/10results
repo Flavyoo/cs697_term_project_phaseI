@@ -1,0 +1,20 @@
+echo "PARAMS:"
+echo "-------"
+sed -n 7,10p test0.out
+echo ""
+
+echo "RESULTS:"
+echo "--------"
+cat results.csv
+echo ""
+
+echo "EPOCHS:"
+echo "-------"
+grep -n --color ", 0.99" test*.out
+grep -n --color ", 0.98" test*.out
+grep -n --color ", 0.97" test*.out
+grep -n --color ", 0.96" test*.out
+grep -n --color ", 0.95" test*.out
+grep -n --color ", 0.94" test*.out
+grep -n --color ", 0.90" test*.out
+grep -n --color "BEST EPOCH:" test*.out
