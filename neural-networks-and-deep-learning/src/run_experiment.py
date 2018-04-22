@@ -15,6 +15,8 @@ Copied from mnist_average_darkness.py
 from sys import argv as args
 import os
 from crater_loader import load_crater_data_wrapper
+import pickle
+
 # My libraries
 import mnist_loader
 from crater_network import Network
@@ -22,12 +24,15 @@ from crater_network import Network
 # Image Size
 SIZE = 200
 OUTPUT_LAYER = 1
+PICKLES = 'Pickles'
 
 # Default settings
 EPOCHS = 5
 MB_SIZE = 16
 ETA = .9
 HIDDEN_LAYER = 30
+PICKLE_DIR = False
+PICKLE_IN = False
 
 if len(args) > 1:
     if args[1] != '.': EPOCHS = int(args[1])
@@ -37,6 +42,21 @@ if len(args) > 3:
     if args[3] != '.': ETA = float(args[3])
 if len(args) > 4:
     if args[4] != '.': HIDDEN_LAYER = int(args[4])
+if len(args) > 5:
+    if args[5] != '.': PICKLE_DIR = "%s/%s" % (PICKLES, str(args[5]))
+if len(args) > 6:
+    PICKLE_IN = "epoch.pkl"
+
+def pickle_it(epoch, dir):
+    pickle_out = open("%s/epoch.pkl" % dir, 'wb')
+    pickle.dump(epoch, pickle_out)
+    pickle_out.close()
+
+def get_pickle():
+    pickle_in = open("epoch.pkl", 'rb')
+    epoch = pickle.load(pickle_in)
+    pickle_in.close()
+    return epoch
 
 def main():
     # Preparing test directories
@@ -45,7 +65,6 @@ def main():
 
     # Load the data
     training_data, test_data = load_crater_data_wrapper('scaled-data.pkl')
-    #training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
 
     # training phase: compute the average darknesses for each digit,
     # based on the training data
@@ -57,10 +76,13 @@ def main():
     print "  MB_Size = %s" % MB_SIZE
     print "  Eta     = %s" % ETA
     print "  Hid Lyr = %s" % HIDDEN_LAYER
-    netwk = Network([SIZE*SIZE,HIDDEN_LAYER,OUTPUT_LAYER], SIZE)
+    if PICKLE_IN:
+        epoch = get_pickle()
+        netwk = Network([SIZE*SIZE,HIDDEN_LAYER,OUTPUT_LAYER], SIZE, epoch)
+    else:
+        netwk = Network([SIZE*SIZE,HIDDEN_LAYER,OUTPUT_LAYER], SIZE)
     print "Training the Network...."
     netwk.SGD(training_data, EPOCHS, MB_SIZE, ETA, test_data=test_data)
-
 
     # testing phase: see how many of the test images are classified
     # correctly
@@ -68,8 +90,12 @@ def main():
     print "Evaluating test data..."
     eval = netwk.evaluate(test_data)
     os.system("echo %s >> results.csv" % ','.join(map(str, eval)))
+    best = netwk.ranker.best_epoch()
+    if PICKLE_DIR:
+        pickle_it((best.weights, best.biases), PICKLE_DIR)
 
     print eval
+    print "BEST EPOCH:\n    %s" % best
 
 
 if __name__ == "__main__":

@@ -13,6 +13,7 @@ and omits many desirable features.
 # Standard library
 import random
 import os
+import epoch_ranker as er
 
 # Third-party libraries
 import numpy as np
@@ -28,7 +29,7 @@ SIZE = 200
 
 class Network(object):
 
-    def __init__(self, sizes, image_size):
+    def __init__(self, sizes, image_size, wb_tuple=None):
         """The list ``sizes`` contains the number of neurons in the
         respective layers of the network.  For example, if the list
         was [2, 3, 1] then it would be a three-layer network, with the
@@ -42,10 +43,16 @@ class Network(object):
         self.im_size = image_size
         self.num_layers = len(sizes)
         self.sizes = sizes
-        self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
-        self.weights = [np.random.randn(y, x)
-                        for x, y in zip(sizes[:-1], sizes[1:])]
         self.validating = False
+        self.ranker = er.EpochRanker()
+        if wb_tuple:
+            print "initializing with custom weights and biases..."
+            self.weights = wb_tuple[0]
+            self.biases = wb_tuple[1]
+        else:
+            self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
+            self.weights = [np.random.randn(y, x)
+                            for x, y in zip(sizes[:-1], sizes[1:])]
 
     def feedforward(self, a):
         """Return the output of the network if ``a`` is input."""
@@ -77,8 +84,10 @@ class Network(object):
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
             if test_data:
-                print "Epoch({0}) validation: {1}\n".format(
-                    j, self.evaluate(test_data))
+                eval = self.evaluate(test_data)
+                qr = eval[4]
+                self.ranker.add_epoch(self.weights,self.biases,qr)
+                print "Epoch({0}) validation: {1}\n".format(j, eval)
             else:
                 print "Epoch {0} complete".format(j)
         self.validating = False # Reset validating
