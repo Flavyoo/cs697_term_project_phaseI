@@ -21,17 +21,16 @@ import pickle
 import mnist_loader
 from crater_network import Network
 
-# Image Size
+# Default settings
 SIZE = 200
 OUTPUT_LAYER = 1
-PICKLES = 'Pickles'
 
-# Default settings
+# Default args
 EPOCHS = 5
 MB_SIZE = 16
 ETA = .9
 HIDDEN_LAYER = 30
-PICKLE_DIR = False
+TEST = 'test'
 PICKLE_IN = False
 
 if len(args) > 1:
@@ -43,9 +42,12 @@ if len(args) > 3:
 if len(args) > 4:
     if args[4] != '.': HIDDEN_LAYER = int(args[4])
 if len(args) > 5:
-    if args[5] != '.': PICKLE_DIR = "%s/%s" % (PICKLES, str(args[5]))
+    if args[5] != '.': TEST = TEST + str(args[5])
 if len(args) > 6:
-    PICKLE_IN = "epoch.pkl"
+    if args[6] != '.': PICKLE_IN = "epoch.pkl"
+
+PICKLE_DIR = "PICKLES/%s" % TEST
+os.system("mkdir -p %s" % PICKLE_DIR)
 
 def pickle_it(epoch, dir):
     pickle_out = open("%s/epoch.pkl" % dir, 'wb')
@@ -57,6 +59,13 @@ def get_pickle():
     epoch = pickle.load(pickle_in)
     pickle_in.close()
     return epoch
+
+def deploy_pickle(netwk):
+    best = netwk.ranker.best_epoch()
+    pickle_it((best.weights, best.biases), PICKLE_DIR)
+    os.system("rm -f *.qr")
+    os.system("touch %s/%s.qr" % (PICKLE_DIR,best.qr))
+    print "BEST EPOCH: %s" % best
 
 def main():
     # Preparing test directories
@@ -90,12 +99,13 @@ def main():
     print "Evaluating test data..."
     eval = netwk.evaluate(test_data)
     os.system("echo %s >> results.csv" % ','.join(map(str, eval)))
-    best = netwk.ranker.best_epoch()
-    if PICKLE_DIR:
-        pickle_it((best.weights, best.biases), PICKLE_DIR)
 
+    # Getting best epoch and exporting as pickle
+    print "Exporting pickle..."
+    deploy_pickle(netwk)
+
+    # Print final results
     print eval
-    print "BEST EPOCH:\n    %s" % best
 
 
 if __name__ == "__main__":

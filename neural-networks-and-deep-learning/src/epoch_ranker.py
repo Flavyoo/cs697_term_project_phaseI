@@ -1,8 +1,6 @@
 #!/usr/bin/python
 from operator import attrgetter
 
-QUALITY_WEIGHT = 1.2
-
 class EpochRanker(object):
     """ Stores epochs with their weights and biases, ranks them by
     quality rate and detect rate and produces the best one """
