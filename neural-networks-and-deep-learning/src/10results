@@ -1,6 +1,6 @@
 echo "PARAMS:"
 echo "-------"
-sed -n 7,10p test0.out
+sed -n 6,9p test0.out
 echo ""
 
 echo "RESULTS:"

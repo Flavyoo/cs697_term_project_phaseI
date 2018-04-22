@@ -49,7 +49,6 @@ class Network(object):
         self.validating = False
         self.ranker = er.EpochRanker()
         if wb_tuple:
-            print "initializing with custom weights and biases..."
             self.weights = wb_tuple[0]
             self.biases = wb_tuple[1]
         else:

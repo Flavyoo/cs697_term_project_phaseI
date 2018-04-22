@@ -3,7 +3,7 @@
 # Prepare False positive, False Negative directories.
 rm -rf FP/
 rm -rf FN/
-mkdir FP FN
+mkdir -p FP FN
 
 # Prepare
 if [ ! -f "data.pkl" ]
