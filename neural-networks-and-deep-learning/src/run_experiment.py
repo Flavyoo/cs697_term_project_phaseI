@@ -86,6 +86,7 @@ def main():
     print "  Eta     = %s" % ETA
     print "  Hid Lyr = %s" % HIDDEN_LAYER
     if PICKLE_IN:
+        print "THIS IS IS PICKLE_IN --- %s" % PICKLE_IN
         epoch = get_pickle()
         netwk = Network([SIZE*SIZE,HIDDEN_LAYER,OUTPUT_LAYER], SIZE, epoch)
     else:
