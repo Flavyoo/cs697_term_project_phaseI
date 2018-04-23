@@ -1,0 +1,32 @@
+Preparing test directories
+Making Network....
+Parameters: 
+  Epochs  = 10
+  MB_Size = 30
+  Eta     = 0.1
+  Hid Lyr = 20
+Training the Network....
+   Training data size   = 685 
+   Validation data size = 295 
+Epoch(0) validation: (0, 0, 97, 198, '---------', '---------', '---------')
+
+Epoch(1) validation: (0, 0, 97, 198, '---------', '---------', '---------')
+
+Epoch(2) validation: (0, 0, 97, 198, '---------', '---------', '---------')
+
+Epoch(3) validation: (0, 0, 97, 198, '---------', '---------', '---------')
+
+Epoch(4) validation: (0, 0, 97, 198, '---------', '---------', '---------')
+
+Epoch(5) validation: (0, 0, 97, 198, '---------', '---------', '---------')
+
+Epoch(6) validation: (0, 0, 97, 198, '---------', '---------', '---------')
+
+Epoch(7) validation: (0, 0, 97, 198, '---------', '---------', '---------')
+
+Epoch(8) validation: (0, 0, 97, 198, '---------', '---------', '---------')
+
+Epoch(9) validation: (0, 0, 97, 198, '---------', '---------', '---------')
+
+Evaluating test data...
+(0, 0, 97, 198, '---------', '---------', '---------')

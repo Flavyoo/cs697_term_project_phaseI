@@ -1,4 +1,17 @@
 #!/bin/bash
+
+# Prepare False positive, False Negative directories.
 rm -rf FP/
 rm -rf FN/
 mkdir FP FN
+
+# Prepare
+if [ ! -f "data.pkl" ]
+  then unzip data.pkl.zip
+fi
+
+if [ ! -f "scaled-data.pkl" ]
+  then unzip scaled-data.pkl.zip
+fi
+
+touch results.csv

@@ -1,0 +1,2 @@
+/Users/flavioandrade/Desktop/Homework/480_Big_Data/Project/cs697_term_project_phaseI/crater_dataset/crater_data/images/scaled_normalized/non-crater-scale/.DS_Store
+Image Not Valid:70% Non Crater Training Set

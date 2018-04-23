@@ -24,11 +24,11 @@ FP_PATH = THIS_DIR + '/FP'
 FN_PATH = THIS_DIR + '/FN'
 
 # Size of Images
-SIZE = 28
+SIZE = 200
 
 class Network(object):
 
-    def __init__(self, sizes):
+    def __init__(self, sizes, image_size):
         """The list ``sizes`` contains the number of neurons in the
         respective layers of the network.  For example, if the list
         was [2, 3, 1] then it would be a three-layer network, with the
@@ -39,6 +39,7 @@ class Network(object):
         layer is assumed to be an input layer, and by convention we
         won't set any biases for those neurons, since biases are only
         ever used in computing the outputs from later layers."""
+        self.im_size = image_size
         self.num_layers = len(sizes)
         self.sizes = sizes
         self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
@@ -64,6 +65,8 @@ class Network(object):
         tracking progress, but slows things down substantially."""
         if test_data:
             n_test = len(test_data)
+            print "   Training data size   = %s " % len(training_data)
+            print "   Validation data size = %s " % len(test_data)
             self.validating = True # Don't write to TP, FN, FP when validating
         n = len(training_data)
         for j in xrange(epochs):
@@ -74,7 +77,7 @@ class Network(object):
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
             if test_data:
-                print "Epoch({0}) validation: {1}".format(
+                print "Epoch({0}) validation: {1}\n".format(
                     j, self.evaluate(test_data))
             else:
                 print "Epoch {0} complete".format(j)
@@ -131,37 +134,67 @@ class Network(object):
             nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
         return (nabla_b, nabla_w)
 
+    def decide(self, output):
+        if output[0] >= .5:
+            return 1
+        else:
+            return 0
+
     def evaluate(self, test_data):
         """Return the number of test inputs for which the neural
         network outputs the correct result. Note that the neural
         network's output is assumed to be the index of whichever
         neuron in the final layer has the highest activation."""
-        test_results = [(np.argmax(self.feedforward(x)), y)
+        test_results = [(self.decide(self.feedforward(x)), y)
                         for (x, y) in test_data]
 
         # Check for and keep track of TP's FP's and FN's
         # Write FP's and FN's to a special directories
         TP = FP = FN = count = 0
+        TN = 0
+        # what you got = x, what should be  = y
         for ((x, y), (image, gt)) in zip(test_results, test_data):
             count += 1
-            if (x == y):
+            if x == 1 and y == 1:
                 TP += 1
             elif x == 1 and y == 0:
                 FP += 1
-                if not self.validating: save_Image(FP_PATH, count, image)
-            else:
+                if not self.validating: self.save_Image(FP_PATH, count, image)
+            elif x == 0 and y == 1:
                 FN += 1
-                if not self.validating: save_Image(FN_PATH, count, image)
+                if not self.validating: self.save_Image(FN_PATH, count, image)
+            else:
+                TN += 1
 
-        detect_rate = float(TP) / float(TP + FN)
-        false_rate = float(FP) / float(TP + FP)
-        quality_rate = float(TP) / float(TP+FP+FN)
-        return TP, FP, FN, detect_rate, false_rate, quality_rate
+
+        if (TP + FP + FN ) == 0:
+            return TP, FP, FN, TN, '---------', '---------','---------'
+        else:
+            quality_rate = float(TP) / float(TP+FP+FN)
+
+        if (TP + FN ) == 0:
+            return TP, FP, FN, TN, quality_rate, '---------','---------'
+        else:
+            detect_rate = float(TP) / float(TP + FN)
+
+        if (TP + FP ) == 0:
+            return TP, FP, FN, TN, '---------', '---------','---------'
+        else:
+            false_rate = float(FP) / float(TP + FP)
+
+        return TP, FP, FN, TN, quality_rate, detect_rate, false_rate
 
     def cost_derivative(self, output_activations, y):
         """Return the vector of partial derivatives \partial C_x /
         \partial a for the output activations."""
         return (output_activations-y)
+
+    def save_Image(self, path, name, array):
+        """Save images to path"""
+        # Resize into a 2D array
+        shaped_arr = np.reshape((array * 255).astype('uint8'),
+                        (self.im_size, self.im_size))
+        cv.imwrite("%s/missed_img%s.jpg" % (path, name),shaped_arr)
 
 #### Miscellaneous functions
 def sigmoid(z):
@@ -171,9 +204,3 @@ def sigmoid(z):
 def sigmoid_prime(z):
     """Derivative of the sigmoid function."""
     return sigmoid(z)*(1-sigmoid(z))
-
-def save_Image(path, name, array):
-    """Save images to path"""
-    # Resize into a 2D array
-    shaped_arr = np.reshape((array * 255).astype('uint8'), (SIZE, SIZE))
-    cv.imwrite("%s/missed_img%s.jpg" % (path, name),shaped_arr)
