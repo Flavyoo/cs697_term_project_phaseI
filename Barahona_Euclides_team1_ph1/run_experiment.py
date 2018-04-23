@@ -20,8 +20,7 @@ import os
 from crater_loader import load_crater_data_wrapper
 # Our modules
 import mnist_loader
-from crater_network import Network
-from crater_network2 import CraterNetwork
+from crater_network import CraterNetwork
 # Image Size
 SIZE = 200
 OUTPUT_LAYER = 1
