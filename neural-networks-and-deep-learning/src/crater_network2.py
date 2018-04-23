@@ -1,7 +1,8 @@
 """"
 Garret, Euclide
 
-Crater network
+Crater Network
+
 This program inherits from the Network class in network.py.
 The init function is overwritten to allow for crating the Crater Network and passing an image size.
 The evaluate function is overwritten to calculate True Positive, False Positive, False
