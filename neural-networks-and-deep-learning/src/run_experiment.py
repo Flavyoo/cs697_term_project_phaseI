@@ -2,7 +2,7 @@
 """
 run_experiment.py
 ~~~~~~~~~~~~~~~~~~~~~~
-Garret, Euclide
+Garret, Euclides
 
 This program reads data from a pickle file using the load_crater_data_wrapper
 function to get the training and test data. We create a neural network and run
@@ -26,10 +26,10 @@ from crater_network2 import CraterNetwork
 SIZE = 200
 OUTPUT_LAYER = 1
 # Default settings
-EPOCHS = 5
-MB_SIZE = 16
-ETA = .9
-HIDDEN_LAYER = 30
+EPOCHS = 30
+MB_SIZE = 1
+ETA = .5
+HIDDEN_LAYER = 400
 
 if len(args) > 1:
     if args[1] != '.': EPOCHS = int(args[1])
