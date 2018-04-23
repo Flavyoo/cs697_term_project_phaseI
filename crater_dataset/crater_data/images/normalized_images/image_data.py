@@ -1,23 +1,10 @@
-"""
-Nikith AnupKumar, Flavio Andrade
-
-This program reads the crater and non-crater images from their directories and
-does the following:
-
-1.) Shuffle each set of image files randomly.
-2.) Read 70% of crater files, put them in an array, and put their label, 1, in the label array.
-4.) Read 70% of the non crater files, put them in an array, and put their label, 0, in the label array.
-5.) Steps 3, 4 are repeated for rest of the crater and non crater files.
-6.) The images are dumped into a pickle file as a tuple.
-"""
-
-import sys
-import os
 import pickle
 import cv2 as cv
-import numpy as np
-# comment this line out or remove it if you do not have paths module.
 from paths import *
+import sys
+import numpy as np
+import os
+import matplotlib.cm
 from matplotlib import pyplot as plt
 from imagewrapper import ImageWrapper
 
@@ -108,7 +95,6 @@ def readImagesFromPath(src, label, filename):
 if __name__ == '__main__':
     # crater and non crater
     #paths = [DEST1, DEST2]
-    # make sure to provide your own path
     paths = [CRATER_SCALED_PATH, NON_CRATER_SCLALED_PATH]
     labels = [1, 0]
     readImagesFromPath(paths, labels, "scaled-data.pkl")

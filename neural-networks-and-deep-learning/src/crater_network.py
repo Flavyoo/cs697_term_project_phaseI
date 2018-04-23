@@ -151,7 +151,6 @@ class Network(object):
         # Check for and keep track of TP's FP's and FN's
         # Write FP's and FN's to a special directories
         TP = FP = FN = count = 0
-        TN = 0
         # what you got = x, what should be  = y
         for ((x, y), (image, gt)) in zip(test_results, test_data):
             count += 1
@@ -163,26 +162,23 @@ class Network(object):
             elif x == 0 and y == 1:
                 FN += 1
                 if not self.validating: self.save_Image(FN_PATH, count, image)
-            else:
-                TN += 1
-
-
-        if (TP + FP + FN ) == 0:
-            return TP, FP, FN, TN, '---------', '---------','---------'
-        else:
-            quality_rate = float(TP) / float(TP+FP+FN)
-
-        if (TP + FN ) == 0:
-            return TP, FP, FN, TN, quality_rate, '---------','---------'
-        else:
-            detect_rate = float(TP) / float(TP + FN)
-
+                    
         if (TP + FP ) == 0:
-            return TP, FP, FN, TN, '---------', '---------','---------'
+            return TP, FP, FN, '---------', '---------','---------'
         else:
             false_rate = float(FP) / float(TP + FP)
 
-        return TP, FP, FN, TN, quality_rate, detect_rate, false_rate
+        if (TP + FN ) == 0:
+            return TP, FP, FN, '---------', '---------', false_rate
+        else:
+            detect_rate = float(TP) / float(TP + FN)
+
+        if (TP + FP + FN ) == 0:
+            return TP, FP, FN, '---------', detect_rate, false_rate
+        else:
+            quality_rate = float(TP) / float(TP+FP+FN)
+            
+        return TP, FP, FN, quality_rate, detect_rate, false_rate
 
     def cost_derivative(self, output_activations, y):
         """Return the vector of partial derivatives \partial C_x /
