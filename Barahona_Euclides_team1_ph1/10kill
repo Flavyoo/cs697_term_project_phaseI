@@ -1,0 +1,3 @@
+ps | grep "run_experiment" > .killtests
+./.testkill.py .killtests
+rm -f .killtests

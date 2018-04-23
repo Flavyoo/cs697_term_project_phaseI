@@ -100,24 +100,27 @@ class CraterNetwork(Network):
             elif x == 0 and y == 1:
                 FN += 1
                 if not self.validating: self.save_Image(FN_PATH, count, image)
-                    
-        if (TP + FP ) == 0:
-            return TP, FP, FN, '---------', '---------','---------'
+            else:
+                TN += 1
+
+
+        if (TP + FP + FN ) == 0:
+            return TP, FP, FN, TN, '---------', '---------','---------'
         else:
-            false_rate = float(FP) / float(TP + FP)
+            quality_rate = float(TP) / float(TP+FP+FN)
 
         if (TP + FN ) == 0:
-            return TP, FP, FN, '---------', '---------', false_rate
+            return TP, FP, FN, TN, quality_rate, '---------','---------'
         else:
             detect_rate = float(TP) / float(TP + FN)
 
-        if (TP + FP + FN ) == 0:
-            return TP, FP, FN, '---------', detect_rate, false_rate
+        if (TP + FP ) == 0:
+            return TP, FP, FN, TN, '---------', '---------','---------'
         else:
-            quality_rate = float(TP) / float(TP+FP+FN)
-            
-        return TP, FP, FN, quality_rate, detect_rate, false_rate
-    
+            false_rate = float(FP) / float(TP + FP)
+
+        return TP, FP, FN, TN, quality_rate, detect_rate, false_rate
+
     def save_Image(self, path, name, array):
         """Save images to path"""
         # Resize into a 2D array
