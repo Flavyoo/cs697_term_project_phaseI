@@ -19,15 +19,22 @@ import numpy as np
 # comment this line out or remove it if you do not have paths module.
 from paths import *
 from matplotlib import pyplot as plt
-from imagewrapper import ImageWrapper
 
 np.set_printoptions(threshold=np.nan)
 
 def readImagesFromPath(src, label, filename):
+    """
+    This function divides the dataset into 70% training, 15% validation, and 15%
+    test data, amongst the crater and non-crater images.
+    """
+    # crater images
     crater_files = os.listdir(src[0])
     np.random.shuffle(crater_files)
+
+    # non crater images
     non_crater_files = os.listdir(src[1])
     np.random.shuffle(non_crater_files)
+
     leng = len(crater_files)
     nleng = len(non_crater_files)
     # training set length
@@ -40,10 +47,11 @@ def readImagesFromPath(src, label, filename):
     # 70% crater for training set
     for image_file in range(tsl):
         image = cv.imread(src[0] + crater_files[image_file])
-        # convert to grayscale
         if image is None:
-            print "Image Not Valid: 70% Crater Training Set"
+            print src[0] + non_crater_files[image_file]
+            print "Image Not Valid: 70% Crater Training Set."
             continue
+        # convert to grayscale
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
         if image_file == 0:
             all_images = np.reshape(image, (1, 40000))
@@ -52,14 +60,14 @@ def readImagesFromPath(src, label, filename):
             all_images = np.append(all_images, image, axis=0)
         labels.append(label[0])
 
-    # 70 % non crater for training set
+    # 70 % non-crater for training set
     for image_file in range(ntsl):
         image = cv.imread(src[1] + non_crater_files[image_file])
-        # convert to grayscale
         if image is None:
             print src[1] + non_crater_files[image_file]
-            print "Image Not Valid:70% Non Crater Training Set"
+            print "Image Not Valid: 70% Non-Crater Training Set."
             continue
+        # convert to grayscale
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
         image = np.reshape(image, (1, 40000))
         all_images = np.append(all_images, image, axis=0)
@@ -67,24 +75,19 @@ def readImagesFromPath(src, label, filename):
 
     training_data = (all_images, labels)
 
-
-
-
-
-
     all_test_images = []
     all_test_labels = []
-    newtsl = int(.15 * leng)+tsl
-    newntsl = int(.15 * nleng)+ntsl      
-    #range from tsl to tsl+.15(length)
-    # data for the validation set, 15% crater test
-    for image_file in range(tsl, newtsl+1):
+    # range from tsl to tsl + .15(length)
+    newtsl = tsl + int(.15 * leng)
+    newntsl = tsl + int(.15 * nleng)
+    # 15% crater for testing
+    for image_file in range(tsl, newtsl + 1):
         image = cv.imread(src[0] + crater_files[image_file])
-        # convert to grayscale
         if image is None:
-            print src[1] + non_crater_files[image_file]
-            print "Image Not Valid: 30% Crater Testing Set"
+            print src[0] + crater_files[image_file]
+            print "Image Not Valid: 15% Crater Testing Set."
             continue
+        # convert to grayscale
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
         if image_file == tsl:
             all_test_images = np.reshape(image, (1, 40000))
@@ -93,65 +96,65 @@ def readImagesFromPath(src, label, filename):
             all_test_images = np.append(all_test_images, image, axis=0)
         all_test_labels.append(label[0])
 
-    # 15% for non crater for testing
-    for image_file in range(ntsl, newntsl+1):
+    # 15% non-crater for testing
+    for image_file in range(ntsl, newntsl + 1):
         image = cv.imread(src[1] + non_crater_files[image_file])
-        # convert to grayscale
-        if image is None:
-            print "Image Not Valid: 30% Non Crater Testing Set"
-            continue;
-        image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-        image = np.reshape(image, (1, 40000))
-        all_test_images = np.append(all_test_images, image, axis=0)
-        all_test_labels.append(label[1])
-
-    val_data = (all_test_images, all_test_labels)
-
-
-
-
-    all_test_images = []
-    all_test_labels = []
-    # data for the testing set, 30% crater test
-    for image_file in range(newtsl, leng):
-        image = cv.imread(src[0] + crater_files[image_file])
-        # convert to grayscale
         if image is None:
             print src[1] + non_crater_files[image_file]
-            print "Image Not Valid: 30% Crater Testing Set"
-            continue
-        image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-        if image_file == tsl:
-            all_test_images = np.reshape(image, (1, 40000))
-        else:
-            image = np.reshape(image, (1, 40000))
-            all_test_images = np.append(all_test_images, image, axis=0)
-        all_test_labels.append(label[0])
-
-    # 30% for non crater for testing
-    for image_file in range(newntsl, nleng):
-        image = cv.imread(src[1] + non_crater_files[image_file])
-        # convert to grayscale
-        if image is None:
-            print "Image Not Valid: 30% Non Crater Testing Set"
+            print "Image Not Valid: 15% Non-Crater Testing Set."
             continue;
+        # convert to grayscale
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
         image = np.reshape(image, (1, 40000))
         all_test_images = np.append(all_test_images, image, axis=0)
         all_test_labels.append(label[1])
 
     test_data = (all_test_images, all_test_labels)
-    all_data = (training_data, val_data, test_data)
-    #all_data = ((all_images, labels), (all_test_images, all_test_labels))
+
+    all_validation_images = []
+    all_validation_labels = []
+    # 15% of the crater set for validation
+    for image_file in range(newtsl, leng):
+        image = cv.imread(src[0] + crater_files[image_file])
+        if image is None:
+            print src[0] + crater_files[image_file]
+            print "Image Not Valid: 15% Validation Set."
+            continue
+        # convert to grayscale
+        image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+        if image_file == newtsl:
+            all_validation_images = np.reshape(image, (1, 40000))
+        else:
+            image = np.reshape(image, (1, 40000))
+            all_validation_images = np.append(all_validation_images, image, axis=0)
+        all_validation_labels.append(label[0])
+
+    # 15% of the non-crater set for validation
+    for image_file in range(newntsl, nleng):
+        image = cv.imread(src[1] + non_crater_files[image_file])
+        # convert to grayscale
+        if image is None:
+            print src[1] + non_crater_files[image_file]
+            print "Image Not Valid: 15% Non-Crater Validation Set."
+            continue;
+        # convert to grayscale
+        image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+        image = np.reshape(image, (1, 40000))
+        all_validation_images = np.append(all_validation_images, image, axis=0)
+        all_validation_labels.append(label[1])
+
+    validation_data = (all_validation_images, all_validation_labels)
+
+    all_data = (training_data, validation_data, test_data)
     my_file = open(filename, 'wb')
     pickle.dump(all_data, my_file)
     my_file.close()
 
 
 if __name__ == '__main__':
-    # crater and non crater
-    #paths = [DEST1, DEST2]
-    # make sure to provide your own path
-    paths = [CRATER_SCALED_PATH, NON_CRATER_SCLALED_PATH]
+    # paths = [DEST1, DEST2]
+    paths = [CRATER_PATH, NON_CRATER_PATH]
+    paths2 = [CRATER_PATH_WITHOUT, NON_CRATER_PATH_WITHOUT]
     labels = [1, 0]
-    readImagesFromPath(paths, labels, "scaled-data.pkl")
+    readImagesFromPath(paths, labels, "phase2-data-with.pkl")
+    readImagesFromPath(paths2, labels, "phase2-data-without.pkl")
