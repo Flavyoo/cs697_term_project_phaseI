@@ -54,14 +54,9 @@ def main():
     print "  MB_Size = %s" % MB_SIZE
     print "  Eta     = %s" % ETA
     print "  Hid Lyr = %s" % HIDDEN_LAYER
-<<<<<<< HEAD
     # to use the Network, replace CraterNetwork with Network
     netwk = CraterNetwork([SIZE*SIZE,HIDDEN_LAYER, OUTPUT_LAYER], SIZE)
-=======
->>>>>>> 9a39fb5b8865f7cd799049059648a4a5b9b01d42
 
-    netwk = Network([SIZE*SIZE,HIDDEN_LAYER,OUTPUT_LAYER], SIZE)
-    
     print "Training the Network...."
     netwk.SGD(training_data, EPOCHS, MB_SIZE, ETA, test_data=test_data)
     # testing phase: see how many of the test images are classified
