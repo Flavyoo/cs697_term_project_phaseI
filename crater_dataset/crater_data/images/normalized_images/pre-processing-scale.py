@@ -1,3 +1,9 @@
+"""
+Nikith AnupKumar
+
+This program reads crater images from their respective locations and scales them
+to be 200 by 200 pixels.
+"""
 import os
 import cv2 as cv
 from paths import CRATER_SCALED_PATH, NON_CRATER_SCLALED_PATH
