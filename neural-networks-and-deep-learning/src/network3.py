@@ -47,6 +47,13 @@ from theano.tensor.signal import downsample
 # Activation functions for neurons
 def linear(z): return z
 def ReLU(z): return T.maximum(0.0, z)
+def LReLU(z):
+    a = .001
+    if (z < 0):
+        return a * z
+    if (z >= 0):
+        return z
+
 from theano.tensor.nnet import sigmoid
 from theano.tensor import tanh
 
