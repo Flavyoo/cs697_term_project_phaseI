@@ -19,7 +19,7 @@ import theano
 import theano.tensor as T
 
 import network3
-from network3 import sigmoid, tanh, ReLU, Network
+from network3 import sigmoid, tanh, ReLU, LReLU, ELU, Network
 from network3 import ConvPoolLayer, FullyConnectedLayer, SoftmaxLayer
 
 training_data, validation_data, test_data = network3.load_data_shared()
@@ -102,7 +102,7 @@ def regularized_dbl_conv():
 
 def dbl_conv_relu():
     for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0]:
-        for j in range(3):
+        for j in range(1):
             print "Conv + Conv + FC num %s, relu, with regularization %s" % (j, lmbda)
             net = Network([
                 ConvPoolLayer(image_shape=(mini_batch_size, 1, 28, 28), 
@@ -114,6 +114,41 @@ def dbl_conv_relu():
                               poolsize=(2, 2), 
                               activation_fn=ReLU),
                 FullyConnectedLayer(n_in=40*4*4, n_out=100, activation_fn=ReLU),
+                SoftmaxLayer(n_in=100, n_out=10)], mini_batch_size)
+            net.SGD(training_data, 60, mini_batch_size, 0.03, validation_data, test_data, lmbda=lmbda)
+
+#Utilizes LReLU as activation function
+def dbl_conv_leakyrelu():
+    for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0]:
+        for j in range(1):
+            print "Conv + Conv + FC num %s, leaky relu, with regularization %s" % (j, lmbda)
+            net = Network([
+                ConvPoolLayer(image_shape=(mini_batch_size, 1, 28, 28), 
+                              filter_shape=(20, 1, 5, 5), 
+                              poolsize=(2, 2), 
+                              activation_fn=LReLU),
+                ConvPoolLayer(image_shape=(mini_batch_size, 20, 12, 12), 
+                              filter_shape=(40, 20, 5, 5), 
+                              poolsize=(2, 2), 
+                              activation_fn=LReLU),
+                FullyConnectedLayer(n_in=40*4*4, n_out=100, activation_fn=LReLU),
+                SoftmaxLayer(n_in=100, n_out=10)], mini_batch_size)
+            net.SGD(training_data, 60, mini_batch_size, 0.03, validation_data, test_data, lmbda=lmbda)
+            
+def dbl_conv_ELU():
+    for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0]:
+        for j in range(1):
+            print "Conv + Conv + FC num %s, leaky relu, with regularization %s" % (j, lmbda)
+            net = Network([
+                ConvPoolLayer(image_shape=(mini_batch_size, 1, 28, 28), 
+                              filter_shape=(20, 1, 5, 5), 
+                              poolsize=(2, 2), 
+                              activation_fn=ELU),
+                ConvPoolLayer(image_shape=(mini_batch_size, 20, 12, 12), 
+                              filter_shape=(40, 20, 5, 5), 
+                              poolsize=(2, 2), 
+                              activation_fn=ELU),
+                FullyConnectedLayer(n_in=40*4*4, n_out=100, activation_fn=ELU),
                 SoftmaxLayer(n_in=100, n_out=10)], mini_batch_size)
             net.SGD(training_data, 60, mini_batch_size, 0.03, validation_data, test_data, lmbda=lmbda)
 
@@ -278,6 +313,8 @@ def run_experiments():
     dbl_conv(activation_fn=sigmoid)
     # omitted, but still interesting: regularized_dbl_conv()
     dbl_conv_relu()
+    dbl_conv_leakyrelu()
+    dbl_conv_ELU()
     expanded_data(n=100)
     expanded_data(n=300)
     expanded_data(n=1000)

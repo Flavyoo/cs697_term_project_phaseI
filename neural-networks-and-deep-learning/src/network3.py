@@ -39,7 +39,7 @@ import gzip
 import numpy as np
 import theano
 import theano.tensor as T
-from theano.tensor.nnet import conv
+from theano.tensor.nnet import conv2d
 from theano.tensor.nnet import softmax
 from theano.tensor import shared_randomstreams
 from theano.tensor.signal import pool
@@ -47,6 +47,18 @@ from theano.tensor.signal import pool
 # Activation functions for neurons
 def linear(z): return z
 def ReLU(z): return T.maximum(0.0, z)
+
+#Leaky ReLU returns a * z for negative numbers, thus allowing for non-zero values and avoids
+#the chance of dead neurons 
+def LReLU(z):
+    a = .001
+    return T.nnet.relu(z, a)
+
+#Exponential LU returns a * (e^z - 1) for negative numbers
+def ELU(z):
+    a = .001
+    return T.nnet.elu(z, a)
+
 from theano.tensor.nnet import sigmoid
 from theano.tensor import tanh
 
@@ -227,7 +239,7 @@ class ConvPoolLayer(object):
 
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
         self.inpt = inpt.reshape(self.image_shape)
-        conv_out = conv.conv2d(
+        conv_out = conv2d(
             input=self.inpt, filters=self.w, filter_shape=self.filter_shape,
             image_shape=self.image_shape)
         pooled_out = pool.pool_2d(
