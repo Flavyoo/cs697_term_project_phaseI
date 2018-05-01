@@ -18,24 +18,24 @@ def dbl_conv_leakyrelu(EPOCHS, MB_SIZE, ETA):
         for j in range(3):
             print "Conv + Conv + FC num %s, leaky relu, with regularization %s" % (j, lmbda)
             net = Network([
-                ConvPoolLayer(image_shape=(mini_batch_size, 1, 28, 28), 
+                ConvPoolLayer(image_shape=(MB_SIZE, 1, 28, 28), 
                               filter_shape=(20, 1, 5, 5), 
                               poolsize=(2, 2), 
                               activation_fn=LReLU),
-                ConvPoolLayer(image_shape=(mini_batch_size, 20, 12, 12), 
+                ConvPoolLayer(image_shape=(MB_SIZE, 20, 12, 12), 
                               filter_shape=(40, 20, 5, 5), 
                               poolsize=(2, 2), 
                               activation_fn=LReLU),
-                ConvPoolLayer(image_shape=(mini_batch_size, 20, 12, 12), 
+                ConvPoolLayer(image_shape=(MB_SIZE, 20, 12, 12), 
                               filter_shape=(40, 20, 5, 5), 
                               poolsize=(2, 2), 
                               activation_fn=LReLU),
-                ConvPoolLayer(image_shape=(mini_batch_size, 20, 12, 12), 
+                ConvPoolLayer(image_shape=(MB_SIZE, 20, 12, 12), 
                               filter_shape=(40, 20, 5, 5), 
                               poolsize=(2, 2), 
                               activation_fn=LReLU),
                 FullyConnectedLayer(n_in=40*4*4, n_out=100, activation_fn=LReLU),
-                SoftmaxLayer(n_in=100, n_out=10)], mini_batch_size)
+                SoftmaxLayer(n_in=100, n_out=10)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
             
 def dbl_conv_ELU(EPOCHS, MB_SIZE, ETA):
@@ -43,24 +43,24 @@ def dbl_conv_ELU(EPOCHS, MB_SIZE, ETA):
         for j in range(3):
             print "Conv + Conv + FC num %s, leaky relu, with regularization %s" % (j, lmbda)
             net = Network([
-                ConvPoolLayer(image_shape=(mini_batch_size, 1, 28, 28), 
+                ConvPoolLayer(image_shape=(MB_SIZE, 1, 28, 28), 
                               filter_shape=(20, 1, 5, 5), 
                               poolsize=(2, 2), 
                               activation_fn=ELU),
-                ConvPoolLayer(image_shape=(mini_batch_size, 20, 12, 12), 
+                ConvPoolLayer(image_shape=(MB_SIZE, 20, 12, 12), 
                               filter_shape=(40, 20, 5, 5), 
                               poolsize=(2, 2), 
                               activation_fn=ELU),
-                ConvPoolLayer(image_shape=(mini_batch_size, 1, 28, 28), 
+                ConvPoolLayer(image_shape=(MB_SIZE, 1, 28, 28), 
                               filter_shape=(20, 1, 5, 5), 
                               poolsize=(2, 2), 
                               activation_fn=ELU),
-                ConvPoolLayer(image_shape=(mini_batch_size, 20, 12, 12), 
+                ConvPoolLayer(image_shape=(MB_SIZE, 20, 12, 12), 
                               filter_shape=(40, 20, 5, 5), 
                               poolsize=(2, 2), 
                               activation_fn=ELU),
                 FullyConnectedLayer(n_in=40*4*4, n_out=100, activation_fn=ELU),
-                SoftmaxLayer(n_in=100, n_out=10)], mini_batch_size)
+                SoftmaxLayer(n_in=100, n_out=10)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
 
 def run_experiments(EPOCHS, MB_SIZE, ETA):
