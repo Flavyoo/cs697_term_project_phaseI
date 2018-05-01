@@ -1,4 +1,4 @@
-from conv import run_experiments
+from crater_deep_network import run_experiments
 
 def main():
   run_experiments()
