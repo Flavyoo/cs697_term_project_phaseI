@@ -24,7 +24,7 @@ from matplotlib import pyplot as plt
 
 np.set_printoptions(threshold=np.nan)
 
-def readImagesFromPath(src, label, filename):
+def readImagesFromPath(src, label, filename, size):
     """
     This function divides the dataset into 70% training, 15% validation, and 15%
     test data, amongst the crater and non-crater images.
@@ -56,9 +56,9 @@ def readImagesFromPath(src, label, filename):
         # convert to grayscale
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
         if image_file == 0:
-            all_images = np.reshape(image, (1, 40000))
+            all_images = np.reshape(image, (1, size * size))
         else:
-            image = np.reshape(image, (1, 40000))
+            image = np.reshape(image, (1, size * size))
             all_images = np.append(all_images, image, axis=0)
         labels.append(label[0])
 
@@ -71,7 +71,7 @@ def readImagesFromPath(src, label, filename):
             continue
         # convert to grayscale
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-        image = np.reshape(image, (1, 40000))
+        image = np.reshape(image, (1, size * size))
         all_images = np.append(all_images, image, axis=0)
         labels.append(label[1])
 
@@ -81,7 +81,7 @@ def readImagesFromPath(src, label, filename):
     all_test_labels = []
     # range from tsl to tsl + .15(length)
     newtsl = tsl + int(.15 * leng)
-    newntsl = tsl + int(.15 * nleng)
+    newntsl = ntsl + int(.15 * nleng)
     # 15% crater for testing
     for image_file in range(tsl, newtsl + 1):
         image = cv.imread(src[0] + crater_files[image_file])
@@ -92,9 +92,9 @@ def readImagesFromPath(src, label, filename):
         # convert to grayscale
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
         if image_file == tsl:
-            all_test_images = np.reshape(image, (1, 40000))
+            all_test_images = np.reshape(image, (1, size * size))
         else:
-            image = np.reshape(image, (1, 40000))
+            image = np.reshape(image, (1, size * size))
             all_test_images = np.append(all_test_images, image, axis=0)
         all_test_labels.append(label[0])
 
@@ -107,7 +107,7 @@ def readImagesFromPath(src, label, filename):
             continue;
         # convert to grayscale
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-        image = np.reshape(image, (1, 40000))
+        image = np.reshape(image, (1, size * size))
         all_test_images = np.append(all_test_images, image, axis=0)
         all_test_labels.append(label[1])
 
@@ -125,9 +125,9 @@ def readImagesFromPath(src, label, filename):
         # convert to grayscale
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
         if image_file == newtsl:
-            all_validation_images = np.reshape(image, (1, 40000))
+            all_validation_images = np.reshape(image, (1, size * size))
         else:
-            image = np.reshape(image, (1, 40000))
+            image = np.reshape(image, (1, size * size))
             all_validation_images = np.append(all_validation_images, image, axis=0)
         all_validation_labels.append(label[0])
 
@@ -141,13 +141,18 @@ def readImagesFromPath(src, label, filename):
             continue;
         # convert to grayscale
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-        image = np.reshape(image, (1, 40000))
+        image = np.reshape(image, (1, size * size))
         all_validation_images = np.append(all_validation_images, image, axis=0)
         all_validation_labels.append(label[1])
 
     validation_data = (all_validation_images, all_validation_labels)
 
     all_data = (training_data, validation_data, test_data)
+
+    #phase2_data = open('phase2.txt', 'w')
+    #print >> phase2_data, all_data
+    #phase2_data.close()
+
     my_file = open(filename, 'wb')
     pickle.dump(all_data, my_file)
     my_file.close()
@@ -156,7 +161,5 @@ def readImagesFromPath(src, label, filename):
 if __name__ == '__main__':
     # paths = [DEST1, DEST2]
     paths = [CRATER_PATH, NON_CRATER_PATH]
-    paths2 = [CRATER_PATH_WITHOUT, NON_CRATER_PATH_WITHOUT]
     labels = [1, 0]
-    readImagesFromPath(paths, labels, "phase2-data-with.pkl")
-    #readImagesFromPath(paths2, labels, "phase2-data-without.pkl")
+    readImagesFromPath(paths, labels, "phase2-data.pkl", 28)
