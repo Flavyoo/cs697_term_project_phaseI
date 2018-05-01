@@ -20,7 +20,7 @@ training_data, validation_data, test_data = network3.load_data_shared()
 def leakyrelu():
     for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0]:
         for j in range(3):
-            print "Conv + Conv + FC num %s, leaky relu, with regularization %s" % (j, lmbda)
+            print "num %s, leaky relu, with regularization %s" % (j, lmbda)
             net = Network([
                 ConvPoolLayer(image_shape=(MB_SIZE, 1, 28, 28), 
                               filter_shape=(20, 1, 5, 5), 
@@ -39,7 +39,7 @@ def leakyrelu():
 def ELU():
     for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0]:
         for j in range(3):
-            print "Conv + Conv + FC num %s, leaky relu, with regularization %s" % (j, lmbda)
+            print "num %s, leaky relu, with regularization %s" % (j, lmbda)
             net = Network([
                 ConvPoolLayer(image_shape=(MB_SIZE, 1, 28, 28), 
                               filter_shape=(20, 1, 5, 5), 
