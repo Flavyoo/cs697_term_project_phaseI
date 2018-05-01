@@ -9,6 +9,7 @@ does the following:
 4.) Read 70% of the non crater files, put them in an array, and put their label, 0, in the label array.
 5.) Steps 3, 4 are repeated for rest of the crater and non crater files.
 6.) The images are dumped into a pickle file as a tuple.
+7.) The rest of the images are split into 15% validation and test data.
 """
 
 import sys
@@ -158,4 +159,4 @@ if __name__ == '__main__':
     paths2 = [CRATER_PATH_WITHOUT, NON_CRATER_PATH_WITHOUT]
     labels = [1, 0]
     readImagesFromPath(paths, labels, "phase2-data-with.pkl")
-    readImagesFromPath(paths2, labels, "phase2-data-without.pkl")
+    #readImagesFromPath(paths2, labels, "phase2-data-without.pkl")

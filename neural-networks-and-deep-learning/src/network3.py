@@ -49,7 +49,7 @@ def linear(z): return z
 def ReLU(z): return T.maximum(0.0, z)
 
 #Leaky ReLU returns a * z for negative numbers, thus allowing for non-zero values and avoids
-#the chance of dead neurons 
+#the chance of dead neurons
 def LReLU(z):
     a = .001
     return T.nnet.relu(z, a)
@@ -96,17 +96,22 @@ def load_data_shared(filename="../data/mnist.pkl.gz"):
 class Network(object):
 
     def __init__(self, layers, mini_batch_size):
-        """Takes a list of `layers`, describing the network architecture, and
+        """
+        Takes a list of `layers`, describing the network architecture, and
         a value for the `mini_batch_size` to be used during training
         by stochastic gradient descent.
-
         """
+        # ex of layers = [ConvPoolLayer, ConvPoolLayer, FullyConnectedLayer, SoftmaxLayer]
         self.layers = layers
         self.mini_batch_size = mini_batch_size
         self.params = [param for layer in self.layers for param in layer.params]
+        # create a matrix with the name 'x'
         self.x = T.matrix("x")
+        # create a ivector with the name 'y'
         self.y = T.ivector("y")
+        # get the ConvPoolLayer
         init_layer = self.layers[0]
+        # calls the set_input of the convolution layer
         init_layer.set_inpt(self.x, self.x, self.mini_batch_size)
         for j in xrange(1, len(self.layers)):
             prev_layer, layer  = self.layers[j-1], self.layers[j]
@@ -131,9 +136,9 @@ class Network(object):
         l2_norm_squared = sum([(layer.w**2).sum() for layer in self.layers])
         cost = self.layers[-1].cost(self)+\
                0.5*lmbda*l2_norm_squared/num_training_batches
+        # compute the gradient of the cost with respect to the parameters in each layer
         grads = T.grad(cost, self.params)
-        updates = [(param, param-eta*grad)
-                   for param, grad in zip(self.params, grads)]
+        updates = [(param, param - eta * grad) for param, grad in zip(self.params, grads)]
 
         # define functions to train a mini-batch, and to compute the
         # accuracy in validation and test mini-batches.
@@ -172,10 +177,12 @@ class Network(object):
         best_validation_accuracy = 0.0
         for epoch in xrange(epochs):
             for minibatch_index in xrange(num_training_batches):
-                iteration = num_training_batches*epoch+minibatch_index
+                iteration = num_training_batches * epoch + minibatch_index
                 if iteration % 1000 == 0:
                     print("Training mini-batch number {0}".format(iteration))
                 cost_ij = train_mb(minibatch_index)
+                # ran through all the minibatches for this iteration ie, epochs,
+                # so then we can compute the validation accuracy
                 if (iteration+1) % num_training_batches == 0:
                     validation_accuracy = np.mean(
                         [validate_mb_accuracy(j) for j in xrange(num_validation_batches)])
@@ -198,11 +205,11 @@ class Network(object):
 #### Define layer types
 
 class ConvPoolLayer(object):
-    """Used to create a combination of a convolutional and a max-pooling
+    """
+    Used to create a combination of a convolutional and a max-pooling
     layer.  A more sophisticated implementation would separate the
     two, but for our purposes we'll always use them together, and it
     simplifies the code, so it makes sense to combine them.
-
     """
 
     def __init__(self, filter_shape, image_shape, poolsize=(2, 2),
