@@ -12,9 +12,8 @@ from network3 import sigmoid, tanh, ReLU, LReLU, ELU, Network
 from network3 import ConvPoolLayer, FullyConnectedLayer, SoftmaxLayer
 
 training_data, validation_data, test_data = network3.load_data_shared()
-mini_batch_size = 10
 
-def dbl_conv_leakyrelu():
+def dbl_conv_leakyrelu(EPOCHS, MB_SIZE, ETA):
     for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0]:
         for j in range(3):
             print "Conv + Conv + FC num %s, leaky relu, with regularization %s" % (j, lmbda)
@@ -36,10 +35,10 @@ def dbl_conv_leakyrelu():
                               poolsize=(2, 2), 
                               activation_fn=LReLU),
                 FullyConnectedLayer(n_in=40*4*4, n_out=100, activation_fn=LReLU),
-                SoftmaxLayer(n_in=100, n_out=1)], mini_batch_size)
-            net.SGD(training_data, 10, mini_batch_size, 0.03, validation_data, test_data, lmbda=lmbda)
+                SoftmaxLayer(n_in=100, n_out=10)], mini_batch_size)
+            net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
             
-def dbl_conv_ELU():
+def dbl_conv_ELU(EPOCHS, MB_SIZE, ETA):
     for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0]:
         for j in range(3):
             print "Conv + Conv + FC num %s, leaky relu, with regularization %s" % (j, lmbda)
@@ -61,9 +60,9 @@ def dbl_conv_ELU():
                               poolsize=(2, 2), 
                               activation_fn=ELU),
                 FullyConnectedLayer(n_in=40*4*4, n_out=100, activation_fn=ELU),
-                SoftmaxLayer(n_in=100, n_out=1)], mini_batch_size)
-net.SGD(training_data, 10, mini_batch_size, 0.03, validation_data, test_data, lmbda=lmbda)
+                SoftmaxLayer(n_in=100, n_out=10)], mini_batch_size)
+            net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
 
-def run_experiments():
-    dbl_conv_leakyrelu()
-    dbl_conv_ELU()
+def run_experiments(EPOCHS, MB_SIZE, ETA):
+    dbl_conv_leakyrelu(EPOCHS, MB_SIZE, ETA)
+    dbl_conv_ELU(EPOCHS, MB_SIZE, ETA)
