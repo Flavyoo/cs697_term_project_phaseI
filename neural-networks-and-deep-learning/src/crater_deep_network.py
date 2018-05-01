@@ -31,7 +31,8 @@ def leakyrelu():
                               poolsize=(2, 2), 
                               activation_fn=LReLU),
                 FullyConnectedLayer(n_in=40*4*4, n_out=400, activation_fn=LReLU),
-                FullyConnectedLayer(n_in=400, n_out=100, activation_fn=LReLU),
+                FullyConnectedLayer(n_in=400, n_out=200, activation_fn=LReLU),
+                FullyConnectedLayer(n_in=200, n_out=100, activation_fn=LReLU),
                 SoftmaxLayer(n_in=100, n_out=10)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
             
@@ -48,15 +49,9 @@ def ELU():
                               filter_shape=(40, 20, 5, 5), 
                               poolsize=(2, 2), 
                               activation_fn=ELU),
-#                ConvPoolLayer(image_shape=(MB_SIZE, 1, 28, 28), 
-#                              filter_shape=(20, 1, 5, 5), 
-#                              poolsize=(2, 2), 
-#                              activation_fn=ELU),
-#                ConvPoolLayer(image_shape=(MB_SIZE, 20, 12, 12), 
-#                              filter_shape=(40, 20, 5, 5), 
-#                              poolsize=(2, 2), 
-#                              activation_fn=ELU),
-                FullyConnectedLayer(n_in=40*4*4, n_out=100, activation_fn=ELU),
+                FullyConnectedLayer(n_in=40*4*4, n_out=400, activation_fn=ELU),
+                FullyConnectedLayer(n_in=400, n_out=200, activation_fn=ELU),
+                FullyConnectedLayer(n_in=200, n_out=100, activation_fn=ELU),
                 SoftmaxLayer(n_in=100, n_out=10)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
 
