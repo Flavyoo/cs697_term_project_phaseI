@@ -20,6 +20,7 @@ import numpy as np
 from paths import *
 from matplotlib import pyplot as plt
 
+
 np.set_printoptions(threshold=np.nan)
 
 def readImagesFromPath(src, label, filename):
