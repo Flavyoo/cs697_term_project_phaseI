@@ -11,9 +11,13 @@ import network3
 from network3 import sigmoid, tanh, ReLU, LReLU, ELU, Network
 from network3 import ConvPoolLayer, FullyConnectedLayer, SoftmaxLayer
 
+EPOCHS = 10
+MB_SIZE = 10
+ETA = .03
 training_data, validation_data, test_data = network3.load_data_shared()
 
-def dbl_conv_leakyrelu(EPOCHS, MB_SIZE, ETA):
+
+def dbl_conv_leakyrelu():
     for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0]:
         for j in range(3):
             print "Conv + Conv + FC num %s, leaky relu, with regularization %s" % (j, lmbda)
@@ -38,7 +42,7 @@ def dbl_conv_leakyrelu(EPOCHS, MB_SIZE, ETA):
                 SoftmaxLayer(n_in=100, n_out=10)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
             
-def dbl_conv_ELU(EPOCHS, MB_SIZE, ETA):
+def dbl_conv_ELU():
     for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0]:
         for j in range(3):
             print "Conv + Conv + FC num %s, leaky relu, with regularization %s" % (j, lmbda)
@@ -63,6 +67,6 @@ def dbl_conv_ELU(EPOCHS, MB_SIZE, ETA):
                 SoftmaxLayer(n_in=100, n_out=10)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
 
-def run_experiments(EPOCHS, MB_SIZE, ETA):
-    dbl_conv_leakyrelu(EPOCHS, MB_SIZE, ETA)
-    dbl_conv_ELU(EPOCHS, MB_SIZE, ETA)
+def run_experiments():
+    dbl_conv_leakyrelu()
+    dbl_conv_ELU()
