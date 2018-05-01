@@ -30,15 +30,8 @@ def leakyrelu():
                               filter_shape=(40, 20, 5, 5), 
                               poolsize=(2, 2), 
                               activation_fn=LReLU),
-#                ConvPoolLayer(image_shape=(MB_SIZE, 40, 12, 12), 
-#                              filter_shape=(40, 20, 5, 5), 
-#                              poolsize=(2, 2), 
-#                              activation_fn=LReLU),
-#                ConvPoolLayer(image_shape=(MB_SIZE, 20, 12, 12), 
-#                              filter_shape=(40, 20, 5, 5), 
-#                              poolsize=(2, 2), 
-#                              activation_fn=LReLU),
-                FullyConnectedLayer(n_in=40*4*4, n_out=100, activation_fn=LReLU),
+                FullyConnectedLayer(n_in=40*4*4, n_out=400, activation_fn=LReLU),
+                FullyConnectedLayer(n_in=400, n_out=100, activation_fn=LReLU),
                 SoftmaxLayer(n_in=100, n_out=10)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
             
