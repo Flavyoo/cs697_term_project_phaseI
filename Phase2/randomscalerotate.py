@@ -4,33 +4,29 @@ import random
 #place this program in images folder to make it work
 
 def randomscaling(srcd,destd):
-    t = []
-    s = srcd+"/non-crater/"
+    s = srcd + "/non-crater/"
     t = os.listdir(s)
-    z = 0;
     for t1 in t:
-        ran=random.randint(10,101)
-        
-        img = cv.imread(s+t1)
+        print 1
+        ran = 28 #random.randint(10,101)
+        img = cv.imread(s + t1)
         img = cv.resize(img, (ran, ran))
         cv.normalize(img, img, 0, 255, cv.NORM_MINMAX)
-        cv.imwrite(destd+'/non-crater/'+'norm'+str(z)+'.jpg',img)
-        z+=1;
+        cv.imwrite(destd + '/non-crater/' + 'norm_' + str(t1), img)
 
-    t = []
-    s = srcd+"/crater/"
+    s = srcd + "/crater/"
     t = os.listdir(s)
-    z= 0
     for t1 in t:
-        ran=random.randint(10,101)
-        img = cv.imread(s+t1)
+        print 2
+        ran = 28 #random.randint(10,101)
+        img = cv.imread(s + t1)
         img = cv.resize(img, (ran, ran))
         cv.normalize(img, img, 0, 255, cv.NORM_MINMAX)
-        cv.imwrite(destd+'/crater/'+'norm'+str(z)+'.jpg',img)
-        z+=1
+        cv.imwrite(destd+'/crater/'+ 'norm_' + str(t1),img)
+
 #relative adrres of directory that contains crater and non craters(inputs)
 #it rotates and scales each image randomly
 #it should be in image directory if u want to use it without changes
-srcd="tile3_24"
-destd='rannorm'
+srcd = "phaseII_images"
+destd = "phaseII_images_norm"
 randomscaling(srcd,destd)
