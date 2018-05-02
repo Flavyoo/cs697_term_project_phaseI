@@ -41,7 +41,7 @@ def leakyrelu():
                 FullyConnectedLayer(n_in=40*4*4, n_out=400, activation_fn=LReLU),
                 FullyConnectedLayer(n_in=400, n_out=200, activation_fn=LReLU),
                 FullyConnectedLayer(n_in=200, n_out=100, activation_fn=LReLU),
-                SoftmaxLayer(n_in=100, n_out=1)], MB_SIZE)
+                SoftmaxLayer(n_in=100, n_out=2)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
 
 def elu():
