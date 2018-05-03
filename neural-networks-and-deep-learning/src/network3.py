@@ -64,7 +64,7 @@ from theano.tensor import tanh
 
 
 #### Constants
-GPU = True
+GPU = False
 if GPU:
     print "Trying to run under a GPU.  If this is not desired, then modify "+\
         "network3.py\nto set the GPU flag to False."
@@ -217,6 +217,16 @@ class ConvPoolLayer(object):
         """`filter_shape` is a tuple of length 4, whose entries are the number
         of filters, the number of input feature maps, the filter height, and the
         filter width.
+
+        featur map = activation map, and it gives the result of the filter at the
+        location it is applied to
+
+        number of filters = the depth of the Conv Layer, and each look for something
+        different in the input image.
+
+        the filters are learned by the network and activate when a
+        visual feature like similar groups of colors, or edges is seen in the
+        first layer,
 
         `image_shape` is a tuple of length 4, whose entries are the
         mini-batch size, the number of input feature maps, the image
