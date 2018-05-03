@@ -11,6 +11,7 @@ import network3
 from network3 import sigmoid, tanh, ReLU, LReLU, ELU, Network
 from network3 import ConvPoolLayer, FullyConnectedLayer, SoftmaxLayer
 
+import conv
 import crater_loader
 
 IMAGE_SIZE = 28
@@ -64,5 +65,6 @@ def elu():
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
 
 def run_experiments():
-    leakyrelu()
-    elu()
+    conv.omit_FC()
+    # leakyrelu()
+    # elu()

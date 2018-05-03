@@ -22,6 +22,8 @@ import network3
 from network3 import sigmoid, tanh, ReLU, LReLU, ELU, Network
 from network3 import ConvPoolLayer, FullyConnectedLayer, SoftmaxLayer
 
+import crater_loader
+
 # training_data, validation_data, test_data = network3.load_data_shared()
 training_data, validation_data, test_data = \
         crater_loader.load_crater_data_phaseII_wrapper("phase2-data.pkl", 28)
