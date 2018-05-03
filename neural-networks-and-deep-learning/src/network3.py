@@ -257,10 +257,10 @@ class ConvPoolLayer(object):
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
         self.inpt = inpt.reshape(self.image_shape)
         conv_out = conv2d(
-            input=self.inpt, filters=self.w, filter_shape=self.filter_shape,
-            image_shape=self.image_shape)
+            input=self.inpt, filters=self.w, input_shape=self.image_shape,
+            filter_shape=self.filter_shape)
         pooled_out = pool.pool_2d(
-            input=conv_out, ds=self.poolsize, ignore_border=True)
+            input=conv_out, ws=self.poolsize, ignore_border=True)
         self.output = self.activation_fn(
             pooled_out + self.b.dimshuffle('x', 0, 'x', 'x'))
         self.output_dropout = self.output # no dropout in the convolutional layers

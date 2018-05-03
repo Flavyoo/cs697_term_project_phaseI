@@ -1,5 +1,6 @@
 from sys import argv as args
 from crater_deep_network import run_experiments
+import os
 
 # Default settings
 #EPOCHS = 20
@@ -23,4 +24,7 @@ def main():
   run_experiments()
 
 if __name__ == "__main__":
+  # Make sure crater pickle is there
+  if not os.path.isfile('phase2-data.pkl'):
+      os.system('unzip phase2-data.pkl.zip')
   main()
