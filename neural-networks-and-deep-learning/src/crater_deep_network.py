@@ -11,6 +11,7 @@ import network3
 from network3 import sigmoid, tanh, ReLU, LReLU, ELU, Network
 from network3 import ConvPoolLayer, FullyConnectedLayer, SoftmaxLayer
 
+import conv
 import crater_loader
 
 IMAGE_SIZE = 28
@@ -22,10 +23,15 @@ RUNS = 1
 
 
 #training_data, validation_data, test_data = network3.load_data_shared()
+
+# PHASE II -- Crater Data
 training_data, validation_data, test_data = \
-        crater_loader.load_crater_data_phaseII_wrapper("phase2-data.pkl", 28)
+   crater_loader.load_crater_data_phaseII_wrapper("phase2-data.pkl", 28)
+
+
 
 def leakyrelu():
+    net = None
     for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0]:
         for j in range(RUNS):
             print "num %s, leaky relu, with regularization %s" % (j, lmbda)
@@ -43,8 +49,10 @@ def leakyrelu():
                 FullyConnectedLayer(n_in=200, n_out=100, activation_fn=LReLU),
                 SoftmaxLayer(n_in=100, n_out=2)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
+    return net
 
 def elu():
+    net = None
     for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0]:
         for j in range(RUNS):
             print "num %s, leaky relu, with regularization %s" % (j, lmbda)
@@ -62,7 +70,9 @@ def elu():
                 FullyConnectedLayer(n_in=200, n_out=100, activation_fn=ELU),
                 SoftmaxLayer(n_in=100, n_out=2)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
+    return net
 
 def run_experiments():
-    leakyrelu()
-    elu()
+    #conv.omit_FC()
+    net = leakyrelu()
+    # elu()

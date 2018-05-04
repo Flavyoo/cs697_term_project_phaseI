@@ -8,7 +8,7 @@ def randomscaling(srcd,destd):
     t = os.listdir(s)
     for t1 in t:
         print 1
-        ran = 28 #random.randint(10,101)
+        ran = 200 #random.randint(10,101)
         img = cv.imread(s + t1)
         img = cv.resize(img, (ran, ran))
         cv.normalize(img, img, 0, 255, cv.NORM_MINMAX)
@@ -18,7 +18,7 @@ def randomscaling(srcd,destd):
     t = os.listdir(s)
     for t1 in t:
         print 2
-        ran = 28 #random.randint(10,101)
+        ran = 200 #random.randint(10,101)
         img = cv.imread(s + t1)
         img = cv.resize(img, (ran, ran))
         cv.normalize(img, img, 0, 255, cv.NORM_MINMAX)
@@ -27,6 +27,6 @@ def randomscaling(srcd,destd):
 #relative adrres of directory that contains crater and non craters(inputs)
 #it rotates and scales each image randomly
 #it should be in image directory if u want to use it without changes
-srcd = "phaseII_images"
-destd = "phaseII_images_norm"
+srcd = "/Users/flavioandrade/Desktop/Homework/480_Big_Data/Project/cs697_term_project_phaseI/crater_dataset/crater_data/images/tile3_24"
+destd = "tile_3_24"
 randomscaling(srcd,destd)
