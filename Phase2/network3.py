@@ -64,7 +64,7 @@ from theano.tensor import tanh
 
 
 #### Constants
-GPU = False
+GPU = True
 if GPU:
     print "Trying to run under a GPU.  If this is not desired, then modify "+\
         "network3.py\nto set the GPU flag to False."
@@ -109,7 +109,7 @@ class Network(object):
         self.x = T.matrix("x")
         # create a ivector with the name 'y'
         self.y = T.ivector("y")
-        # get the ConvPoolLayer
+        # get the ConvPoolLayer, initial layer
         init_layer = self.layers[0]
         # calls the set_input of the convolution layer
         init_layer.set_inpt(self.x, self.x, self.mini_batch_size)
@@ -255,12 +255,14 @@ class ConvPoolLayer(object):
         self.params = [self.w, self.b]
 
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
+        print self.image_shape
         self.inpt = inpt.reshape(self.image_shape)
         conv_out = conv2d(
             input=self.inpt, filters=self.w, input_shape=self.image_shape,
             filter_shape=self.filter_shape)
         pooled_out = pool.pool_2d(
             input=conv_out, ws=self.poolsize, ignore_border=True)
+        # calls reshape of this function
         self.output = self.activation_fn(
             pooled_out + self.b.dimshuffle('x', 0, 'x', 'x'))
         self.output_dropout = self.output # no dropout in the convolutional layers
