@@ -162,4 +162,4 @@ if __name__ == '__main__':
     # paths = [DEST1, DEST2]
     paths = [CRATER_PATH, NON_CRATER_PATH]
     labels = [1, 0]
-    readImagesFromPath(paths, labels, "rotated-15x15.pkl", 15)
+    readImagesFromPath(paths, labels, "non-rotated-15x15.pkl", 15)
