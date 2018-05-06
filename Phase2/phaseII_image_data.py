@@ -55,8 +55,6 @@ def readImagesFromPath(src, label, filename, size):
             continue
         # convert to grayscale
         image = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-        print image.shape
-        print src[0] + crater_files[image_file]
         if image_file == 0:
             all_images = np.reshape(image, (1, size * size))
         else:
@@ -164,4 +162,4 @@ if __name__ == '__main__':
     # paths = [DEST1, DEST2]
     paths = [CRATER_PATH, NON_CRATER_PATH]
     labels = [1, 0]
-    readImagesFromPath(paths, labels, "non-rotated-15x15.pkl", 15)
+    readImagesFromPath(paths, labels, "rotated-15x15.pkl", 15)

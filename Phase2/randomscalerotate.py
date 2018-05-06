@@ -28,5 +28,5 @@ def randomscaling(srcd,destd, size):
 #it rotates and scales each image randomly
 #it should be in image directory if u want to use it without changes
 srcd = "/Users/flavioandrade/Desktop/Homework/480_Big_Data/Project/cs697_term_project_phaseI/Phase2/phaseII_images_200x200/"
-destd = "15x15"
+destd = "rotated-15x15"
 randomscaling(srcd,destd, 15)
