@@ -25,11 +25,11 @@ ETA = .03
 RUNS = 1
 
 
-training_data, validation_data, test_data = network3.load_data_shared()
+#training_data, validation_data, test_data = network3.load_data_shared()
 
 # PHASE II -- Crater Data
-#training_data, validation_data, test_data = \
-   #crater_loader.load_crater_data_phaseII_wrapper(INPUT_DATA, IMAGE_SIZE)
+training_data, validation_data, test_data = \
+   crater_loader.load_crater_data_phaseII_wrapper(INPUT_DATA, IMAGE_SIZE)
 
 
 
