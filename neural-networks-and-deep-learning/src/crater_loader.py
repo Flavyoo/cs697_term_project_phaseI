@@ -15,6 +15,7 @@ the test and the training data. The final values are then returned.
 """
 
 import pickle
+import cPickle
 import numpy as np
 import theano
 import theano.tensor as T
@@ -37,7 +38,7 @@ def load_crater_data_wrapper(filename):
 
 def load_crater_data_phaseII_wrapper(filename, size):
     my_file = open(filename, 'rb')
-    training_data, validation_data, test_data = pickle.load(my_file)
+    training_data, validation_data, test_data = cPickle.load(my_file)
     my_file.close()
     training_data_inputs = [np.reshape(x, (size * size, 1)) for x in training_data[0]]
     trd = zip(training_data_inputs, training_data[1])
