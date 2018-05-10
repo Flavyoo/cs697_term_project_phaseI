@@ -52,19 +52,19 @@ def elu():
             print "num %s, leaky relu, with regularization %s" % (j, lmbda)
             net = Network([
                 ConvPoolLayer(image_shape=(MB_SIZE, 1, IMAGE_SIZE, IMAGE_SIZE),
-                              filter_shape=(10, 1, 11, 11),
-                              poolsize=(3, 3),
+                              filter_shape=(10, 1, 5, 5),
+                              poolsize=(2, 2),
                               activation_fn=ELU),
-                ConvPoolLayer(image_shape=(MB_SIZE, 10, 30, 30),
+                ConvPoolLayer(image_shape=(MB_SIZE, 10, 12, 12),
                               filter_shape=(20, 10, 3, 3),
                               poolsize=(2, 2),
                               activation_fn=ELU),
-                FullyConnectedLayer(n_in=20*14*14, n_out=1000, activation_fn=ELU),
-                FullyConnectedLayer(n_in=1000, n_out=1000, activation_fn=ELU),
-                FullyConnectedLayer(n_in=100, n_out=100, activation_fn=ELU),
+                FullyConnectedLayer(n_in=20*5*5, n_out=200, activation_fn=ELU),
+                FullyConnectedLayer(n_in=200, n_out=200, activation_fn=ELU),
+                FullyConnectedLayer(n_in=200, n_out=100, activation_fn=ELU),
                 SoftmaxLayer(n_in=100, n_out=2)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
 
 def run_experiments():
-    leakyrelu()
-    # elu()
+    #leakyrelu()
+    elu()
