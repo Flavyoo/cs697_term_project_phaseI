@@ -14,8 +14,8 @@ the test and the training data. The final values are then returned.
 
 """
 
-import pickle
 import cPickle
+import pickle
 import numpy as np
 import theano
 import theano.tensor as T
@@ -40,14 +40,16 @@ def load_crater_data_phaseII_wrapper(filename, size):
     my_file = open(filename, 'rb')
     training_data, validation_data, test_data = cPickle.load(my_file)
     my_file.close()
-    training_data_inputs = [np.reshape(x, (size * size, 1)) for x in training_data[0]]
-    trd = zip(training_data_inputs, training_data[1])
 
-    validation_data_inputs = [np.reshape(x, (size * size, 1)) for x in validation_data[0]]
-    vd = zip(validation_data_inputs, validation_data[1])
+    #print (training_data[0][0][0].__class__.__name__)
+    #print (training_data[1][0].__class__.__name__)
 
-    test_data_inputs = [np.reshape(x, (size * size, 1)) for x in test_data[0]]
-    ted = zip(test_data_inputs, test_data[1])
+    training_data = shuffle_data(training_data, size)
+    validation_data = shuffle_data(validation_data, size)
+    test_data = shuffle_data(test_data, size)
+
+    #print (training_data[0][0][0].__class__.__name__)
+    #print (training_data[1][0].__class__.__name__)
 
     def shared(data):
         """Place the data into shared variables.  This allows Theano to copy
@@ -59,8 +61,17 @@ def load_crater_data_phaseII_wrapper(filename, size):
         shared_y = theano.shared(
             np.asarray(data[1], dtype=theano.config.floatX), borrow=True)
         return shared_x, T.cast(shared_y, "int32")
-    return (shared(training_data), shared(validation_data), shared(test_data))
+    return [shared(training_data), shared(validation_data), shared(test_data)]
+
+def shuffle_data(data, size):
+    data_input = [np.reshape(x, (size * size)) for x in data[0]]
+    tup = zip(data_input, data[1])
+    random.shuffle(tup)
+    sep_x = [element[0] for element in tup]
+    sep_y = [element[1] for element in tup]
+
+    return (np.asarray(sep_x), sep_y)
 
 if __name__ == '__main__':
-    training_data, validation_data, test_data = load_crater_data_phaseII_wrapper("phase2-data.pkl", 28)
+    training_data, validation_data, test_data = load_crater_data_phaseII_wrapper("non_rotated_28x28.pkl", 28)
     print training_data[0]
