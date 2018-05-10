@@ -136,7 +136,7 @@ def readImagesFromPath(src, label, filename, size):
     all_validation_images = []
     all_validation_labels = []
     # 15% of the crater set for validation
-    print("test data...")
+    print("validation...")
     for image_file in range(newtsl, leng):
 
         image = cv.imread(src[0] + crater_files[image_file])
