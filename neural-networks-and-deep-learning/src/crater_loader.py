@@ -13,7 +13,7 @@ and put into a tuple consisting of the image itself, and its label. This is done
 the test and the training data. The final values are then returned.
 
 """
-
+import random
 import cPickle
 import pickle
 import numpy as np
