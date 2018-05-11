@@ -4,6 +4,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
+import cPickle
 import theano
 import theano.tensor as T
 
@@ -13,6 +14,7 @@ from network3 import ConvPoolLayer, FullyConnectedLayer, SoftmaxLayer
 
 import crater_loader
 
+
 IMAGE_SIZE = 28
 
 EPOCHS = 10
@@ -20,6 +22,7 @@ MB_SIZE = 1
 ETA = .03
 RUNS = 1
 
+PICKLE = "Pickles/elu-network%sx%s" % (IMAGE_SIZE, IMAGE_SIZE)
 
 #training_data, validation_data, test_data = network3.load_data_shared()
 
@@ -47,6 +50,7 @@ def leakyrelu():
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
 
 def elu():
+    net = None
     for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0]:
         for j in range(RUNS):
             print "num %s, leaky relu, with regularization %s" % (j, lmbda)
@@ -64,7 +68,10 @@ def elu():
                 FullyConnectedLayer(n_in=200, n_out=100, activation_fn=ELU),
                 SoftmaxLayer(n_in=100, n_out=2)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
+    return net
 
 def run_experiments():
-    #leakyrelu()
-    elu()
+    # leakyrelu()
+    net = elu()
+    cPickle.dump(net, open(PICKLE, 'wb'))
+    predictions = net.test_mb_accuracy(0)

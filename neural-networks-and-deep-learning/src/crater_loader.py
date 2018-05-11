@@ -66,7 +66,7 @@ def load_crater_data_phaseII_wrapper(filename, size):
 def shuffle_data(data, size):
     data_input = [np.reshape(x, (size * size)) for x in data[0]]
     tup = zip(data_input, data[1])
-    random.shuffle(tup)
+    np.random.shuffle(tup)
     sep_x = [element[0] for element in tup]
     sep_y = [element[1] for element in tup]
 
