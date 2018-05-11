@@ -123,3 +123,8 @@ crater_dataset/crater_data/images/normalized_images/paths.py
 crater_dataset/crater_data/images/normalized_images/data.pkl
 crater_dataset/crater_data/images/normalized_images/image.txt
 .DS_Store
+#*.zip
+Phase2/new_100x100.pkl.zip
+Phase2/new_100x100.pkl.zip
+crater_dataset/crater_data/.DS_Store
+crater_dataset/.DS_Store
