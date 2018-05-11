@@ -4,13 +4,12 @@ Flavio Andrade 5-11-18
 This programs plots the test and validation accuracies.
 """
 import matplotlib.pyplot as plt
-import numpy as np
 import matplotlib as mpl
 
 def plotDataFit(testData, validationData, EPOCHS):
     mpl.style.use('seaborn')
     plt.title("Test vs Validation Accuracy", color='C0')
-    plt.axis([0, EPOCHS, 0, 100])
+    plt.axis([0, EPOCHS, 0, 1])
     plt.ylabel('Accuracy')
     plt.xlabel('Epochs')
     epochs = list(range(EPOCHS))
