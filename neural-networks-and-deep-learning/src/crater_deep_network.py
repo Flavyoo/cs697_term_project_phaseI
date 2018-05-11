@@ -1,5 +1,4 @@
 from collections import Counter
-
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -14,11 +13,7 @@ from network3 import ConvPoolLayer, FullyConnectedLayer, SoftmaxLayer
 
 import crater_loader
 
-<<<<<<< HEAD
-IMAGE_SIZE = 100
-=======
 IMAGE_SIZE = 101
->>>>>>> 1a36068acb3d8682e5a96fdda478e24a01f56e5b
 
 EPOCHS = 15
 MB_SIZE = 1
@@ -31,11 +26,7 @@ PICKLE = "Pickles/elu-network%sx%s" % (IMAGE_SIZE, IMAGE_SIZE)
 
 # PHASE II -- Crater Data
 training_data, validation_data, test_data = \
-<<<<<<< HEAD
-   crater_loader.load_crater_data_phaseII_wrapper("100x100.pkl", 100)
-=======
-   crater_loader.load_crater_data_phaseII_wrapper("101x101.pkl", 101)
->>>>>>> 1a36068acb3d8682e5a96fdda478e24a01f56e5b
+crater_loader.load_crater_data_phaseII_wrapper("101x101.pkl", 101)
 
 def leakyrelu():
     net = None
@@ -84,7 +75,5 @@ def run_experiments():
     net = elu()
     cPickle.dump(net, open(PICKLE, 'wb'))
     predictions = net.test_mb_accuracy(0)
-<<<<<<< HEAD
-=======
->>>>>>> a97f4b42153381626a01c4d9546d814c308a253b
->>>>>>> 1a36068acb3d8682e5a96fdda478e24a01f56e5b
+    validation_accuracies = net.validation_accuracies
+    test_accuracies = net.test_accuracies

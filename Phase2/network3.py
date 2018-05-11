@@ -104,6 +104,8 @@ class Network(object):
         # ex of layers = [ConvPoolLayer, ConvPoolLayer, FullyConnectedLayer, SoftmaxLayer]
         self.layers = layers
         self.mini_batch_size = mini_batch_size
+        self.validation_accuracies = []
+        self.test_accuracies = []
         self.params = [param for layer in self.layers for param in layer.params]
         # create a matrix with the name 'x'
         self.x = T.matrix("x")
@@ -159,7 +161,7 @@ class Network(object):
                 self.y:
                 validation_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
             })
-        test_mb_accuracy = theano.function(
+        b_accuracy = theano.function(
             [i], self.layers[-1].accuracy(self.y),
             givens={
                 self.x:
@@ -167,7 +169,7 @@ class Network(object):
                 self.y:
                 test_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
             })
-        self.test_mb_predictions = theano.function(
+        self.b_predictions = theano.function(
             [i], self.layers[-1].y_out,
             givens={
                 self.x:
@@ -186,6 +188,7 @@ class Network(object):
                 if (iteration+1) % num_training_batches == 0:
                     validation_accuracy = np.mean(
                         [validate_mb_accuracy(j) for j in xrange(num_validation_batches)])
+                    self.validation_accuracies.append(validation_accuracy)
                     print("Epoch {0}: validation accuracy {1:.2%}".format(
                         epoch, validation_accuracy))
                     if validation_accuracy >= best_validation_accuracy:
@@ -195,6 +198,7 @@ class Network(object):
                         if test_data:
                             test_accuracy = np.mean(
                                 [test_mb_accuracy(j) for j in xrange(num_test_batches)])
+                            self.test_accuracies.append(test_accuracy)
                             print('The corresponding test accuracy is {0:.2%}'.format(
                                 test_accuracy))
         print("Finished training network.")
@@ -255,7 +259,6 @@ class ConvPoolLayer(object):
         self.params = [self.w, self.b]
 
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
-        print self.image_shape
         self.inpt = inpt.reshape(self.image_shape)
         conv_out = conv2d(
             input=self.inpt, filters=self.w, input_shape=self.image_shape,
