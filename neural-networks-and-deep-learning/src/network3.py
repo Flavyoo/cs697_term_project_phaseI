@@ -51,12 +51,12 @@ def ReLU(z): return T.maximum(0.0, z)
 #Leaky ReLU returns a * z for negative numbers, thus allowing for non-zero values and avoids
 #the chance of dead neurons
 def LReLU(z):
-    a = .001
+    a = .0001
     return T.nnet.relu(z, a)
 
 #Exponential LU returns a * (e^z - 1) for negative numbers
 def ELU(z):
-    a = .001
+    a = .0001
     return T.nnet.elu(z, a)
 
 from theano.tensor.nnet import sigmoid
@@ -124,20 +124,14 @@ class Network(object):
             validation_data, test_data, lmbda=0.0):
         """Train the network using mini-batch stochastic gradient descent."""
 
-        print "SGD getting data..."
-
         training_x, training_y = training_data
         validation_x, validation_y = validation_data
         test_x, test_y = test_data
-
-        print "SGD Calculating batches..."
 
         # compute number of minibatches for training, validation and testing
         num_training_batches = size(training_data)/mini_batch_size
         num_validation_batches = size(validation_data)/mini_batch_size
         num_test_batches = size(test_data)/mini_batch_size
-
-        print "SGD Calculating cost..."
 
         # define the (regularized) cost function, symbolic gradients, and updates
         l2_norm_squared = sum([(layer.w**2).sum() for layer in self.layers])
@@ -145,13 +139,14 @@ class Network(object):
                0.5*lmbda*l2_norm_squared/num_training_batches
         # compute the gradient of the cost with respect to the parameters in each layer
         grads = T.grad(cost, self.params)
-        updates = [(param, param - eta * grad) for param, grad in zip(self.params, grads)]
+        #updates = [(param, param - eta * grad) for param, grad in zip(self.params, grads)]
 
         # define functions to train a mini-batch, and to compute the
         # accuracy in validation and test mini-batches.
         i = T.lscalar() # mini-batch index
+        epoch = T.fscalar()
         train_mb = theano.function(
-            [i], cost, updates=updates,
+            [i, epoch], cost, updates=[(param,param- (eta * (T.exp(-.1 * epoch) )) * grad) for param, grad in zip(self.params, grads)],
             givens={
                 self.x:
                 training_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
@@ -181,8 +176,6 @@ class Network(object):
                 test_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
             })
 
-        print "Starting the training..."
-
         # Do the actual training
         best_validation_accuracy = 0.0
         for epoch in xrange(epochs):
@@ -190,7 +183,7 @@ class Network(object):
                 iteration = num_training_batches * epoch + minibatch_index
                 if iteration % 1000 == 0:
                     print("Training mini-batch number {0}".format(iteration))
-                cost_ij = train_mb(minibatch_index)
+                cost_ij = train_mb(minibatch_index, epoch)
                 # ran through all the minibatches for this iteration ie, epochs,
                 # so then we can compute the validation accuracy
                 if (iteration+1) % num_training_batches == 0:
@@ -247,8 +240,6 @@ class ConvPoolLayer(object):
 
         """
 
-        print "ConvPoolLayer initializing..."
-
         self.filter_shape = filter_shape
         self.image_shape = image_shape
         self.poolsize = poolsize
@@ -269,8 +260,6 @@ class ConvPoolLayer(object):
 
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
 
-        print "Setting input..."
-
         self.inpt = inpt.reshape(self.image_shape)
         conv_out = conv2d(
             input=self.inpt, filters=self.w, input_shape=self.image_shape,
@@ -286,8 +275,6 @@ class FullyConnectedLayer(object):
     These neurons have complete connections to all activations in previous layers.
     """
     def __init__(self, n_in, n_out, activation_fn=sigmoid, p_dropout=0.0):
-
-        print "FullyConnectedLayer initializing..."
 
         self.n_in = n_in
         self.n_out = n_out
@@ -321,8 +308,6 @@ class FullyConnectedLayer(object):
         return T.mean(T.eq(y, self.y_out))
 
 class SoftmaxLayer(object):
-
-    print "FullyConnectedLayer initializing... "
 
     def __init__(self, n_in, n_out, p_dropout=0.0):
         self.n_in = n_in

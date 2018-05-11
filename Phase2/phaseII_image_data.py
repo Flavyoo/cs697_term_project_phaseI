@@ -50,7 +50,7 @@ def readImagesFromPath(src, label, filename, size):
     # 70% crater for training set
     print("train data...")
     for image_file in range(tsl):
-        
+
         #print (1)
         image = cv.imread(src[0] + crater_files[image_file])
         if image is None:
@@ -96,7 +96,7 @@ def readImagesFromPath(src, label, filename, size):
     # 15% crater for testing
     print("test data...")
     for image_file in range(tsl, newtsl + 1):
-        
+
         image = cv.imread(src[0] + crater_files[image_file])
 
         if image is None:
