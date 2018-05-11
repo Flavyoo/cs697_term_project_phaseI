@@ -144,9 +144,8 @@ class Network(object):
         # define functions to train a mini-batch, and to compute the
         # accuracy in validation and test mini-batches.
         i = T.lscalar() # mini-batch index
-        epoch = T.fscalar()
         train_mb = theano.function(
-            [i, epoch], cost, updates=[(param,param- (eta * (T.exp(-.1 * epoch) )) * grad) for param, grad in zip(self.params, grads)],
+            [i], cost, updates=[(param,param - eta * grad) for param, grad in zip(self.params, grads)],
             givens={
                 self.x:
                 training_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
@@ -183,7 +182,8 @@ class Network(object):
                 iteration = num_training_batches * epoch + minibatch_index
                 if iteration % 1000 == 0:
                     print("Training mini-batch number {0}".format(iteration))
-                cost_ij = train_mb(minibatch_index, epoch)
+                cost_ij = train_mb(minibatch_index)
+                cPickle.dump(self, open('Pickles/network-epoch%s.pkl' % epoch, 'wb'))
                 # ran through all the minibatches for this iteration ie, epochs,
                 # so then we can compute the validation accuracy
                 if (iteration+1) % num_training_batches == 0:

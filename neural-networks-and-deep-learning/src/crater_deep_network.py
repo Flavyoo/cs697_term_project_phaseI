@@ -76,4 +76,3 @@ def run_experiments():
     net = elu()
     cPickle.dump(net, open(PICKLE, 'wb'))
     predictions = net.test_mb_accuracy(0)
->>>>>>> a97f4b42153381626a01c4d9546d814c308a253b
