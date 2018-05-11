@@ -10,51 +10,23 @@ in detail.  Consult the original text for more details.
 """
 
 from collections import Counter
-
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import theano
 import theano.tensor as T
-
 import network3
 from network3 import sigmoid, tanh, ReLU, LReLU, ELU, Network
 from network3 import ConvPoolLayer, FullyConnectedLayer, SoftmaxLayer
-
 import crater_loader
-import cPickle as pickle
-import os
 
-TEST = "testnetwork.pkl"
-PICKLE_DIR = "Network_Pickles/%s" % TEST
-os.system("mkdir -p %s" % PICKLE_DIR)
-
-def pickle_it(netwk, dir):
-    pickle_out = open("%s/network.pkl" % dir, 'wb')
-    pickle.dump(netwk, pickle_out)
-    pickle_out.close()
-
-def get_pickle():
-    pickle_in = open(PICKLE_IN, 'rb')
-    epoch = pickle.load(pickle_in)
-    pickle_in.close()
-    return epoch
-
-def deploy_pickle(netwk):
-    best = netwk.ranker.best_epoch()
-    pickle_it((best.weights, best.biases), PICKLE_DIR)
-    os.system("rm -f *.qr")
-    os.system("touch %s/%s.qr" % (PICKLE_DIR,best.qr))
-    print "BEST EPOCH: %s" % best
-
+mini_batch_size = 10
 # training_data, validation_data, test_data = network3.load_data_shared()
 
 # PHASE II --- Crater Data
 training_data, validation_data, test_data = \
         crater_loader.load_crater_data_phaseII_wrapper("phase2-data.pkl", 28)
-
-mini_batch_size = 10
 
 def shallow(n=3, epochs=60):
     nets = []

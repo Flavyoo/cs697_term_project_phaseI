@@ -64,7 +64,7 @@ from theano.tensor import tanh
 
 
 #### Constants
-GPU = False
+GPU = True
 if GPU:
     print "Trying to run under a GPU.  If this is not desired, then modify "+\
         "network3.py\nto set the GPU flag to False."
@@ -109,7 +109,7 @@ class Network(object):
         self.x = T.matrix("x")
         # create a ivector with the name 'y'
         self.y = T.ivector("y")
-        # get the ConvPoolLayer
+        # get the ConvPoolLayer, initial layer
         init_layer = self.layers[0]
         # calls the set_input of the convolution layer
         init_layer.set_inpt(self.x, self.x, self.mini_batch_size)
@@ -123,21 +123,14 @@ class Network(object):
     def SGD(self, training_data, epochs, mini_batch_size, eta,
             validation_data, test_data, lmbda=0.0):
         """Train the network using mini-batch stochastic gradient descent."""
-
-        print "SGD getting data..."
-
         training_x, training_y = training_data
         validation_x, validation_y = validation_data
         test_x, test_y = test_data
-
-        print "SGD Calculating batches..."
 
         # compute number of minibatches for training, validation and testing
         num_training_batches = size(training_data)/mini_batch_size
         num_validation_batches = size(validation_data)/mini_batch_size
         num_test_batches = size(test_data)/mini_batch_size
-
-        print "SGD Calculating cost..."
 
         # define the (regularized) cost function, symbolic gradients, and updates
         l2_norm_squared = sum([(layer.w**2).sum() for layer in self.layers])
@@ -180,9 +173,6 @@ class Network(object):
                 self.x:
                 test_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
             })
-
-        print "Starting the training..."
-
         # Do the actual training
         best_validation_accuracy = 0.0
         for epoch in xrange(epochs):
@@ -246,9 +236,6 @@ class ConvPoolLayer(object):
         x pooling sizes.
 
         """
-
-        print "ConvPoolLayer initializing..."
-
         self.filter_shape = filter_shape
         self.image_shape = image_shape
         self.poolsize = poolsize
@@ -268,15 +255,14 @@ class ConvPoolLayer(object):
         self.params = [self.w, self.b]
 
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
-
-        print "Setting input..."
-
+        print self.image_shape
         self.inpt = inpt.reshape(self.image_shape)
         conv_out = conv2d(
             input=self.inpt, filters=self.w, input_shape=self.image_shape,
             filter_shape=self.filter_shape)
         pooled_out = pool.pool_2d(
             input=conv_out, ws=self.poolsize, ignore_border=True)
+        # calls reshape of this function
         self.output = self.activation_fn(
             pooled_out + self.b.dimshuffle('x', 0, 'x', 'x'))
         self.output_dropout = self.output # no dropout in the convolutional layers
@@ -286,9 +272,6 @@ class FullyConnectedLayer(object):
     These neurons have complete connections to all activations in previous layers.
     """
     def __init__(self, n_in, n_out, activation_fn=sigmoid, p_dropout=0.0):
-
-        print "FullyConnectedLayer initializing..."
-
         self.n_in = n_in
         self.n_out = n_out
         self.activation_fn = activation_fn
@@ -321,8 +304,6 @@ class FullyConnectedLayer(object):
         return T.mean(T.eq(y, self.y_out))
 
 class SoftmaxLayer(object):
-
-    print "FullyConnectedLayer initializing... "
 
     def __init__(self, n_in, n_out, p_dropout=0.0):
         self.n_in = n_in

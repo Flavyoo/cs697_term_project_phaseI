@@ -14,8 +14,11 @@ the test and the training data. The final values are then returned.
 
 """
 
+import cPickle
 import pickle
 import numpy as np
+import theano
+import theano.tensor as T
 
 # call this to get image data and label
 # take in a string filename
@@ -32,3 +35,43 @@ def load_crater_data_wrapper(filename):
     # test data
     ted = zip(test_data_inputs, test_data[1])
     return (trd, ted)
+
+def load_crater_data_phaseII_wrapper(filename, size):
+    my_file = open(filename, 'rb')
+    training_data, validation_data, test_data = cPickle.load(my_file)
+    my_file.close()
+
+    #print (training_data[0][0][0].__class__.__name__)
+    #print (training_data[1][0].__class__.__name__)
+
+    training_data = shuffle_data(training_data, size)
+    validation_data = shuffle_data(validation_data, size)
+    test_data = shuffle_data(test_data, size)
+
+    #print (training_data[0][0][0].__class__.__name__)
+    #print (training_data[1][0].__class__.__name__)
+
+    def shared(data):
+        """Place the data into shared variables.  This allows Theano to copy
+        the data to the GPU, if one is available.
+
+        """
+        shared_x = theano.shared(
+            np.asarray(data[0], dtype=theano.config.floatX), borrow=True)
+        shared_y = theano.shared(
+            np.asarray(data[1], dtype=theano.config.floatX), borrow=True)
+        return shared_x, T.cast(shared_y, "int32")
+    return [shared(training_data), shared(validation_data), shared(test_data)]
+
+def shuffle_data(data, size):
+    data_input = [np.reshape(x, (size * size)) for x in data[0]]
+    tup = zip(data_input, data[1])
+    random.shuffle(tup)
+    sep_x = [element[0] for element in tup]
+    sep_y = [element[1] for element in tup]
+
+    return (np.asarray(sep_x), sep_y)
+
+if __name__ == '__main__':
+    training_data, validation_data, test_data = load_crater_data_phaseII_wrapper("non_rotated_28x28.pkl", 28)
+    print training_data[0]

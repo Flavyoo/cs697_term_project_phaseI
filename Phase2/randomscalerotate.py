@@ -3,34 +3,30 @@ import cv2 as cv
 import random
 #place this program in images folder to make it work
 
-def randomscaling(srcd,destd):
-    t = []
-    s = srcd+"/non-crater/"
+def randomscaling(srcd,destd, size):
+    s = srcd + "/non-crater/"
     t = os.listdir(s)
-    z = 0;
     for t1 in t:
-        ran=random.randint(10,101)
-        
-        img = cv.imread(s+t1)
-        img = cv.resize(img, (ran, ran))
+        print 1
+        ran = 200 #random.randint(10,101)
+        img = cv.imread(s + t1)
+        img = cv.resize(img, (size, size))
         cv.normalize(img, img, 0, 255, cv.NORM_MINMAX)
-        cv.imwrite(destd+'/non-crater/'+'norm'+str(z)+'.jpg',img)
-        z+=1;
+        cv.imwrite(destd + '/non-crater/' + 'norm_' + str(t1), img)
 
-    t = []
-    s = srcd+"/crater/"
+    s = srcd + "/crater/"
     t = os.listdir(s)
-    z= 0
     for t1 in t:
-        ran=random.randint(10,101)
-        img = cv.imread(s+t1)
-        img = cv.resize(img, (ran, ran))
+        print 2
+        ran = 200 #random.randint(10,101)
+        img = cv.imread(s + t1)
+        img = cv.resize(img, (size, size))
         cv.normalize(img, img, 0, 255, cv.NORM_MINMAX)
-        cv.imwrite(destd+'/crater/'+'norm'+str(z)+'.jpg',img)
-        z+=1
+        cv.imwrite(destd+'/crater/'+ 'norm_' + str(t1),img)
+
 #relative adrres of directory that contains crater and non craters(inputs)
 #it rotates and scales each image randomly
 #it should be in image directory if u want to use it without changes
-srcd="tile3_24"
-destd='rannorm'
-randomscaling(srcd,destd)
+srcd = "/Users/flavioandrade/Desktop/Homework/480_Big_Data/Project/cs697_term_project_phaseI/Phase2/non-rotated_images_200x200/"
+destd = "15x15"
+randomscaling(srcd,destd, 15)
