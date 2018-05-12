@@ -18,6 +18,12 @@ class CraterList(object):
     def __init__(self):
         self.craters = []
 
+    def size(self):
+        return len(self.craters)
+
+    def get_crater(self, i):
+        return self.craters[i]
+
     def add(self, center, radius):
         self.craters.append(Crater(center, radius))
 
