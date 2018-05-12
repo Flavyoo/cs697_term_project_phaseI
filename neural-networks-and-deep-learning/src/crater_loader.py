@@ -46,7 +46,6 @@ def load_crater_data_phaseII_wrapper(filename, size):
 
     training_data = shuffle_data(training_data, size)
     validation_data = shuffle_data(validation_data, size)
-    test_data = shuffle_data(test_data, size)
 
     #print (training_data[0][0][0].__class__.__name__)
     #print (training_data[1][0].__class__.__name__)

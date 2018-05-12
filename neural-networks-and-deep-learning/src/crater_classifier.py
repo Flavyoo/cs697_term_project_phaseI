@@ -28,11 +28,14 @@ class CraterClassifier(object):
 
 if __name__ == '__main__':
     import crater_loader as cl
-    network_pickle = 'Pickles/elu-network28x28.pkl'
-    dataset= "non_rotated_28x28.pkl"
-    image_size = 28
+    network_pickle = 'Pickles/ELU-ntwk-e9-val0.9935-tst0.9805.pkl'
+    dataset= "101x101.pkl"
+    image_size = 101
     classifier = cPickle.load(open(network_pickle))
     datasets = cl.load_crater_data_phaseII_wrapper(dataset, image_size)
-    test_set_x, test_set_y = datasets[0]
+    test_set_x, test_set_y = datasets[2]
+    xx, labels = cPickle.load(open(dataset))[2]
     cc = CraterClassifier(network_pickle, test_set_x)
-    print cc.get_classifications()
+    results = cc.get_classifications()
+    for tup in zip(results, labels):
+        print tup
