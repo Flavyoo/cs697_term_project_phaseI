@@ -14,9 +14,6 @@ def sliding_window(img, stepSize, windowSize):
 
 
 
-
-
-
 def pyramid(img, scale=1.5, minSize=(30, 30)):
 
 	#yield image
