@@ -104,6 +104,8 @@ class Network(object):
         # ex of layers = [ConvPoolLayer, ConvPoolLayer, FullyConnectedLayer, SoftmaxLayer]
         self.layers = layers
         self.mini_batch_size = mini_batch_size
+        self.validation_accuracies = []
+        self.test_accuracies = []
         self.params = [param for layer in self.layers for param in layer.params]
         # create a matrix with the name 'x'
         self.x = T.matrix("x")
@@ -120,7 +122,7 @@ class Network(object):
         self.output = self.layers[-1].output
         self.output_dropout = self.layers[-1].output_dropout
 
-    def SGD(self, training_data, epochs, mini_batch_size, eta,
+    def SGD(self, act_func, training_data, epochs, mini_batch_size, eta,
             validation_data, test_data, lmbda=0.0):
         """Train the network using mini-batch stochastic gradient descent."""
 
@@ -183,12 +185,12 @@ class Network(object):
                 if iteration % 1000 == 0:
                     print("Training mini-batch number {0}".format(iteration))
                 cost_ij = train_mb(minibatch_index)
-                cPickle.dump(self, open('Pickles/network-epoch%s.pkl' % epoch, 'wb'))
                 # ran through all the minibatches for this iteration ie, epochs,
                 # so then we can compute the validation accuracy
                 if (iteration+1) % num_training_batches == 0:
                     validation_accuracy = np.mean(
                         [validate_mb_accuracy(j) for j in xrange(num_validation_batches)])
+                    self.validation_accuracies.append(validation_accuracy)
                     print("Epoch {0}: validation accuracy {1:.2%}".format(
                         epoch, validation_accuracy))
                     if validation_accuracy >= best_validation_accuracy:
@@ -198,8 +200,12 @@ class Network(object):
                         if test_data:
                             test_accuracy = np.mean(
                                 [test_mb_accuracy(j) for j in xrange(num_test_batches)])
+                            self.test_accuracies.append(test_accuracy)
                             print('The corresponding test accuracy is {0:.2%}'.format(
                                 test_accuracy))
+                            pickle_name = 'Pickles/{0:}-ntwk-e{1:}-val{2:.4}-tst{3:.4}.pkl'.format(act_func,epoch,best_validation_accuracy,test_accuracy)
+                            print 'Writing out new best validation accuracy to network pickle -- %s!!!' % pickle_name
+                            cPickle.dump(self, open(pickle_name, 'wb'))
         print("Finished training network.")
         print("Best validation accuracy of {0:.2%} obtained at iteration {1}".format(
             best_validation_accuracy, best_iteration))
