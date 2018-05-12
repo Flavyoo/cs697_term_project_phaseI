@@ -31,6 +31,7 @@ total_test_accuracies = []
 
 def leakyrelu():
     net = None
+<<<<<<< HEAD
     for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1,1.0]:
         for j in range(RUNS):
             print "num %s, leaky relu, with regularization %s" % (j, lmbda)
@@ -50,10 +51,29 @@ def leakyrelu():
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
             total_validation_accuracies.append(net.validation_accuracies)
             total_test_accuracies.append(net.test_accuracies)
+=======
+    for j in range(RUNS):
+        print "num %s, leaky relu, with regularization %s" % (j, 0.00001)
+        net = Network([
+            ConvPoolLayer(image_shape=(MB_SIZE, 1, IMAGE_SIZE, IMAGE_SIZE),
+                          filter_shape=(5, 1, 12, 12),
+                          poolsize=(3, 3),
+                          activation_fn=LReLU),
+            ConvPoolLayer(image_shape=(MB_SIZE, 5, 30, 30),
+                          filter_shape=(10, 5, 3, 3),
+                          poolsize=(2, 2),
+                          activation_fn=LReLU),
+            FullyConnectedLayer(n_in=10*14*14, n_out=200, activation_fn=LReLU),
+            FullyConnectedLayer(n_in=200, n_out=200, activation_fn=LReLU),
+            FullyConnectedLayer(n_in=200, n_out=100, activation_fn=LReLU),
+            SoftmaxLayer(n_in=100, n_out=2)], MB_SIZE)
+        net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=0.00001)
+>>>>>>> 393c86b803ed79cc76743cab219bc74c76c6f430
     return net
 
 def elu():
     net = None
+<<<<<<< HEAD
     for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1,1.0]:
         for j in range(RUNS):
             print "num %s, leaky relu, with regularization %s" % (j, lmbda)
@@ -73,6 +93,24 @@ def elu():
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
             total_validation_accuracies.append(net.validation_accuracies)
             total_test_accuracies.append(net.test_accuracies)
+=======
+    for j in range(RUNS):
+        print "num %s, leaky relu, with regularization %s" % (j, 0.0001)
+        net = Network([
+            ConvPoolLayer(image_shape=(MB_SIZE, 1, IMAGE_SIZE, IMAGE_SIZE),
+                          filter_shape=(5, 1, 12, 12),
+                          poolsize=(3, 3),
+                          activation_fn=LReLU),
+            ConvPoolLayer(image_shape=(MB_SIZE, 5, 30, 30),
+                          filter_shape=(10, 5, 3, 3),
+                          poolsize=(2, 2),
+                          activation_fn=LReLU),
+            FullyConnectedLayer(n_in=10*14*14, n_out=200, activation_fn=LReLU),
+            FullyConnectedLayer(n_in=200, n_out=200, activation_fn=LReLU),
+            FullyConnectedLayer(n_in=200, n_out=100, activation_fn=LReLU),
+            SoftmaxLayer(n_in=100, n_out=2)], MB_SIZE)
+        net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=0.0001)
+>>>>>>> 393c86b803ed79cc76743cab219bc74c76c6f430
     return net
 
 def flattenArray(two_d):
