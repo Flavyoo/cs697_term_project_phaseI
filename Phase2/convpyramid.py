@@ -53,7 +53,7 @@ class Pyramid:
 
     def pyramid(self, scale=1.5, minSize=(30, 30)):
         self.scale = scale
-        for s in range(-6, -4, 2):
+        for s in range(-6, 6, 2):
             w = int(self.original_width * math.pow(scale, s))
             self.pyramid_image = imutils.resize(self.original_image, width=w)
             self.height = self.pyramid_image.shape[1]
@@ -84,10 +84,13 @@ class Pyramid:
                         image_data[0] = np.append(image_data[0], image, axis=0)
                         image_data[1] += [(center_point_y,center_point_x)]
                         image_data[3] += [clone.shape[0]]
+                    cv2.imshow("Window", clone)
+                    cv2.waitKey(1)
+                    time.sleep(0.025)
             classifier = CraterClassifier(pickle, self.shared(image_data[0]))
             classifications = classifier.get_classifications()
-
-            return image_data
+            #print classifications
+        return image_data
 
     def crop(self, x,y,w,h,image):
         image = image[x:x+w, y:y+h]
@@ -109,7 +112,7 @@ def main():
     pickle = 'Pickles/leaky-ntwk-e0-val0.9741-tst0.9643.pkl'
     image_path = str(sys.argv[1])
     pyramid = Pyramid(image_path, 10, 101, ['gt_tile3_24.csv', 'gt_tile3_25.csv'])
-    print pyramid.runPyramid(pickle)[0]
+    pyramid.runPyramid(pickle)
 
 if __name__ == '__main__':
     main()
