@@ -1,9 +1,9 @@
 """
 Flavio Andrade 5-11-18
-
 This programs plots the test and validation accuracies.
 """
 import matplotlib.pyplot as plt
+import numpy as np
 import matplotlib as mpl
 
 def plotDataFit(testData, validationData, EPOCHS):
@@ -18,7 +18,10 @@ def plotDataFit(testData, validationData, EPOCHS):
     plt.legend([line1, line2], ['Test Data', 'Validation Data'])
     plt.show()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test = list(range(15))
     vals = list(range(15, 30))
+    #test_numpy = np.array(test)
+    #vals_numpy = np.array(vals)
     plotDataFit([.98, .91, .95, .96, .99], [.93, .98, .91, .99, .93], 5)
+    #plotDataFit(test_numpy, vals_numpy, 15)

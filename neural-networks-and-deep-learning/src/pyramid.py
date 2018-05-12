@@ -1,30 +1,24 @@
-
 # import the necessary packages
-
-
 import argparse
 import time
 import cv2
 import imutils
- 
- 
- 
- 
+
 def sliding_window(img, stepSize, windowSize):
 	for y in xrange(0, img.shape[0], stepSize):
 		for x in xrange(0, img.shape[1], stepSize):
 			yield (x, y, img[y:y + windowSize[1], x:x + windowSize[0]])
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
 
 def pyramid(img, scale=1.5, minSize=(30, 30)):
 
 	#yield image
- 
+
 
 	while True:
 		w = int(img.shape[1] / scale)
@@ -37,7 +31,7 @@ def crop(x,y,w,h,image,name):
 	#img = cv2.imread("tile3_24.png")
 	crop_img = image[x:x+w, y:y+h]
 	cv2.imwrite('alldata/'+name+'.jpg',crop_img)
-	return 
+	return
 
 
 
@@ -56,8 +50,8 @@ reno=0
 for resized in pyramid(image, scale=1.5):
 	reno+=1
 	wino=0
-	
-	
+
+
 	for (x, y, window) in sliding_window(resized, stepSize=32, windowSize=(winW, winH)):
 		# if the window does not meet our desired window size, ignore it
 		if window.shape[0] != winH or window.shape[1] != winW:
