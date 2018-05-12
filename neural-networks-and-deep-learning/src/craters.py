@@ -30,9 +30,9 @@ class CraterList(object):
     def found_crater(self, point, scale, s):
         x = float(point[0]) * pow(scale, -s)
         y = float(point[1]) * pow(scale, -s)
-        for crater in self.craters:
-            if crater.contains_pt([x, y]):
-                return True
+        for id in self.size():
+            if self.craters[id].contains_pt([x, y]):
+                return id
         return False
 
 
