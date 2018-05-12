@@ -1,5 +1,4 @@
 from collections import Counter
-
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -7,31 +6,32 @@ import numpy as np
 import cPickle
 import theano
 import theano.tensor as T
-
-import network3
-from network3 import sigmoid, tanh, ReLU, LReLU, ELU, Network
-from network3 import ConvPoolLayer, FullyConnectedLayer, SoftmaxLayer
-
+from network3 import *
+from plotdatafitting import plotDataFit
 import crater_loader
-
-IMAGE_SIZE = 100
-
-EPOCHS = 15
+# uncomment if you do not want graph to show up.
+IMAGE_SIZE = 101
+EPOCHS = 20
 MB_SIZE = 1
 ETA = .005
 RUNS = 1
+LAMBDA_LENGTH = 1
 
 PICKLE = "Pickles/elu-network%sx%s" % (IMAGE_SIZE, IMAGE_SIZE)
-
 #training_data, validation_data, test_data = network3.load_data_shared()
 
 # PHASE II -- Crater Data
 training_data, validation_data, test_data = \
-   crater_loader.load_crater_data_phaseII_wrapper("new_100x100.pkl", 100)
+crater_loader.load_crater_data_phaseII_wrapper("101x101.pkl", 101)
+
+total_validation_accuracies = []
+total_test_accuracies = []
+
+#accuracies = open('accuracies.txt', 'wb')
 
 def leakyrelu():
     net = None
-    for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0]:
+    for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1,1.0]:
         for j in range(RUNS):
             print "num %s, leaky relu, with regularization %s" % (j, lmbda)
             net = Network([
@@ -48,11 +48,13 @@ def leakyrelu():
                 FullyConnectedLayer(n_in=200, n_out=100, activation_fn=LReLU),
                 SoftmaxLayer(n_in=100, n_out=2)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
+            total_validation_accuracies.append(net.validation_accuracies)
+            total_test_accuracies.append(net.test_accuracies)
     return net
 
 def elu():
     net = None
-    for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1, 1.0]:
+    for lmbda in [0.0, 0.00001, 0.0001, 0.001, 0.01, 0.1,1.0]:
         for j in range(RUNS):
             print "num %s, leaky relu, with regularization %s" % (j, lmbda)
             net = Network([
@@ -69,10 +71,23 @@ def elu():
                 FullyConnectedLayer(n_in=200, n_out=100, activation_fn=LReLU),
                 SoftmaxLayer(n_in=100, n_out=2)], MB_SIZE)
             net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=lmbda)
+            total_validation_accuracies.append(net.validation_accuracies)
+            total_test_accuracies.append(net.test_accuracies)
     return net
 
+def flattenArray(two_d):
+    return [element for array in two_d for element in array]
+
 def run_experiments():
-    # leakyrelu()
-    net = elu()
-    cPickle.dump(net, open(PICKLE, 'wb'))
-    predictions = net.test_mb_accuracy(0)
+    """
+    the length of the test and validation accuracies may be different
+    so i only save the best validation accuracies, and use the length of
+    the resulting array instead of the number of epochs
+    """
+    #leakyrelu()
+    net = leakyrelu()
+    #cPickle.dump(net, open(PICKLE, 'wb'))
+    #predictions = net.test_mb_accuracy(0)
+    tta = flattenArray(total_test_accuracies)
+    tva = flattenArray(total_validation_accuracies)
+    plotDataFit(tta, tva, len(tta), 1, "leakyrelu_20Epochs");
