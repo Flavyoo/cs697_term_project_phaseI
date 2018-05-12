@@ -31,7 +31,7 @@ crater_loader.load_crater_data_phaseII_wrapper("101x101.pkl", 101)
 def leakyrelu():
     net = None
     for j in range(RUNS):
-        print "num %s, leaky relu, with regularization %s" % (j, lmbda)
+        print "num %s, leaky relu, with regularization %s" % (j, 0.00001)
         net = Network([
             ConvPoolLayer(image_shape=(MB_SIZE, 1, IMAGE_SIZE, IMAGE_SIZE),
                           filter_shape=(5, 1, 12, 12),
@@ -51,7 +51,7 @@ def leakyrelu():
 def elu():
     net = None
     for j in range(RUNS):
-        print "num %s, leaky relu, with regularization %s" % (j, lmbda)
+        print "num %s, leaky relu, with regularization %s" % (j, 0.0001)
         net = Network([
             ConvPoolLayer(image_shape=(MB_SIZE, 1, IMAGE_SIZE, IMAGE_SIZE),
                           filter_shape=(5, 1, 12, 12),
