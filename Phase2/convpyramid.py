@@ -33,7 +33,7 @@ class Pyramid:
                 yield (x, y, self.pyramid_image[y:y + self.swz, x:x + self.swz])
 
     def pyramid(self, scale=1.5, minSize=(30, 30)):
-        for s in range(-6, 4, 2):
+        for s in range(-6, 6, 2):
             w = int(self.original_width * math.pow(scale, s))
             self.pyramid_image = imutils.resize(self.original_image, width=w)
             self.height = self.pyramid_image.shape[1]
@@ -44,14 +44,13 @@ class Pyramid:
 
     def runPyramid(self):
         for resized in self.pyramid():
-            print resized.shape
-            """for (x, y, window) in self.slidingWindow():
+            for (x, y, window) in self.slidingWindow():
                 clone = resized.copy()
                 if x + self.swz <= clone.shape[0] and y + self.swz <= clone.shape[1]:
                     cv2.rectangle(clone, (x, y), (x + self.swz, y + self.swz), (0, 255, 255), 3)
                     cv2.imshow("Window", clone)
                     cv2.waitKey(1)
-                    time.sleep(0.025)"""
+                    time.sleep(0.010)
 
 def main():
     image_path = str(sys.argv[1])
