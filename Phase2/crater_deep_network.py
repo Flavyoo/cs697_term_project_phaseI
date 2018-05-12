@@ -11,7 +11,7 @@ from plotdatafitting import plotDataFit
 import crater_loader
 # uncomment if you do not want graph to show up.
 IMAGE_SIZE = 101
-EPOCHS = 20
+EPOCHS = 2
 MB_SIZE = 1
 ETA = .005
 RUNS = 1
@@ -44,7 +44,7 @@ def leakyrelu():
             FullyConnectedLayer(n_in=200, n_out=200, activation_fn=LReLU),
             FullyConnectedLayer(n_in=200, n_out=100, activation_fn=LReLU),
             SoftmaxLayer(n_in=100, n_out=2)], MB_SIZE)
-        net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=0.00001)
+        net.SGD("leaky", training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=0.00001)
         total_validation_accuracies.append(net.validation_accuracies)
         total_test_accuracies.append(net.test_accuracies)
     return net
@@ -66,7 +66,7 @@ def elu():
             FullyConnectedLayer(n_in=200, n_out=200, activation_fn=LReLU),
             FullyConnectedLayer(n_in=200, n_out=100, activation_fn=LReLU),
             SoftmaxLayer(n_in=100, n_out=2)], MB_SIZE)
-        net.SGD(training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=0.0001)
+        net.SGD("elu", training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=0.0001)
         total_validation_accuracies.append(net.validation_accuracies)
         total_test_accuracies.append(net.test_accuracies)
     return net
@@ -75,15 +75,7 @@ def flattenArray(two_d):
     return [element for array in two_d for element in array]
 
 def run_experiments():
-    """
-    the length of the test and validation accuracies may be different
-    so i only save the best validation accuracies, and use the length of
-    the resulting array instead of the number of epochs
-    """
-    #leakyrelu()
     net = leakyrelu()
-    #cPickle.dump(net, open(PICKLE, 'wb'))
-    #predictions = net.test_mb_accuracy(0)
     tta = flattenArray(total_test_accuracies)
     tva = flattenArray(total_validation_accuracies)
-    plotDataFit(tta, tva, len(tta), 1, "leakyrelu_20Epochs");
+    #plotDataFit(tta, tva, len(tta), 1, "leakyrelu_20Epochs");

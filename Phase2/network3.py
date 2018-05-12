@@ -51,12 +51,12 @@ def ReLU(z): return T.maximum(0.0, z)
 #Leaky ReLU returns a * z for negative numbers, thus allowing for non-zero values and avoids
 #the chance of dead neurons
 def LReLU(z):
-    a = .001
+    a = .0001
     return T.nnet.relu(z, a)
 
 #Exponential LU returns a * (e^z - 1) for negative numbers
 def ELU(z):
-    a = .001
+    a = .0001
     return T.nnet.elu(z, a)
 
 from theano.tensor.nnet import sigmoid
@@ -111,7 +111,7 @@ class Network(object):
         self.x = T.matrix("x")
         # create a ivector with the name 'y'
         self.y = T.ivector("y")
-        # get the ConvPoolLayer, initial layer
+        # get the ConvPoolLayer
         init_layer = self.layers[0]
         # calls the set_input of the convolution layer
         init_layer.set_inpt(self.x, self.x, self.mini_batch_size)
@@ -122,9 +122,10 @@ class Network(object):
         self.output = self.layers[-1].output
         self.output_dropout = self.layers[-1].output_dropout
 
-    def SGD(self, training_data, epochs, mini_batch_size, eta,
+    def SGD(self, act_func, training_data, epochs, mini_batch_size, eta,
             validation_data, test_data, lmbda=0.0):
         """Train the network using mini-batch stochastic gradient descent."""
+
         training_x, training_y = training_data
         validation_x, validation_y = validation_data
         test_x, test_y = test_data
@@ -140,13 +141,13 @@ class Network(object):
                0.5*lmbda*l2_norm_squared/num_training_batches
         # compute the gradient of the cost with respect to the parameters in each layer
         grads = T.grad(cost, self.params)
-        updates = [(param, param - eta * grad) for param, grad in zip(self.params, grads)]
+        #updates = [(param, param - eta * grad) for param, grad in zip(self.params, grads)]
 
         # define functions to train a mini-batch, and to compute the
         # accuracy in validation and test mini-batches.
         i = T.lscalar() # mini-batch index
         train_mb = theano.function(
-            [i], cost, updates=updates,
+            [i], cost, updates=[(param,param - eta * grad) for param, grad in zip(self.params, grads)],
             givens={
                 self.x:
                 training_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
@@ -168,24 +169,16 @@ class Network(object):
                 test_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
                 self.y:
                 test_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
-        })
-        b_accuracy = theano.function(
-            [i], self.layers[-1].accuracy(self.y),
-            givens={
-                self.x:
-                test_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size],
-                self.y:
-                test_y[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
             })
-        self.b_predictions = theano.function(
+        self.test_mb_predictions = theano.function(
             [i], self.layers[-1].y_out,
             givens={
                 self.x:
                 test_x[i*self.mini_batch_size: (i+1)*self.mini_batch_size]
             })
+
         # Do the actual training
         best_validation_accuracy = 0.0
-        test_accuracy = 0.0
         for epoch in xrange(epochs):
             for minibatch_index in xrange(num_training_batches):
                 iteration = num_training_batches * epoch + minibatch_index
@@ -210,9 +203,11 @@ class Network(object):
                             self.validation_accuracies.append(best_validation_accuracy)
                             print('The corresponding test accuracy is {0:.2%}'.format(
                                 test_accuracy))
+                            pickle_name = 'Pickles/{0:}-ntwk-e{1:}-val{2:.4}-tst{3:.4}.pkl'.format(act_func,epoch,best_validation_accuracy,test_accuracy)
+                            print 'Writing out new best validation accuracy to network pickle -- %s!!!' % pickle_name
+                            cPickle.dump(self, open(pickle_name, 'wb'))
         self.test_accuracies.append(test_accuracy)
         self.validation_accuracies.append(best_validation_accuracy)
-
         print("Finished training network.")
         print("Best validation accuracy of {0:.2%} obtained at iteration {1}".format(
             best_validation_accuracy, best_iteration))
@@ -252,6 +247,7 @@ class ConvPoolLayer(object):
         x pooling sizes.
 
         """
+
         self.filter_shape = filter_shape
         self.image_shape = image_shape
         self.poolsize = poolsize
@@ -271,13 +267,13 @@ class ConvPoolLayer(object):
         self.params = [self.w, self.b]
 
     def set_inpt(self, inpt, inpt_dropout, mini_batch_size):
+
         self.inpt = inpt.reshape(self.image_shape)
         conv_out = conv2d(
             input=self.inpt, filters=self.w, input_shape=self.image_shape,
             filter_shape=self.filter_shape)
         pooled_out = pool.pool_2d(
             input=conv_out, ws=self.poolsize, ignore_border=True)
-        # calls reshape of this function
         self.output = self.activation_fn(
             pooled_out + self.b.dimshuffle('x', 0, 'x', 'x'))
         self.output_dropout = self.output # no dropout in the convolutional layers
@@ -287,6 +283,7 @@ class FullyConnectedLayer(object):
     These neurons have complete connections to all activations in previous layers.
     """
     def __init__(self, n_in, n_out, activation_fn=sigmoid, p_dropout=0.0):
+
         self.n_in = n_in
         self.n_out = n_out
         self.activation_fn = activation_fn

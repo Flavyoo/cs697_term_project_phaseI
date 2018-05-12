@@ -67,7 +67,7 @@ def readImagesFromPath(src, label, filename, size):
             image = np.reshape(image, (1, size * size))
             all_images = np.append(all_images, image, axis=0)
         labels.append(label[0])
-
+    print all_images
     # 70 % non-crater for training set
     for image_file in range(ntsl):
         #print(2)
@@ -186,8 +186,8 @@ def readImagesFromPath(src, label, filename, size):
 
 
 if __name__ == '__main__':
-    # paths = [DEST1, DEST2]
-    paths = ["/Users/Nikith/Desktop/4333/cs697_term_project_phaseI/Phase2/phaseII_images/crater/","/Users/Nikith/Desktop/4333/cs697_term_project_phaseI/Phase2/phaseII_images/non-crater/"]
+    paths = [CRATER_PATH, NON_CRATER_PATH]
+    #paths = ["/Users/Nikith/Desktop/4333/cs697_term_project_phaseI/Phase2/phaseII_images/crater/","/Users/Nikith/Desktop/4333/cs697_term_project_phaseI/Phase2/phaseII_images/non-crater/"]
     #print("gggg")
     labels = [1, 0]
-    readImagesFromPath(paths, labels, "non-rotated-28x28.pkl", 28)
+    readImagesFromPath(paths, labels, "non-rotated-28x28.pkl", 100)
