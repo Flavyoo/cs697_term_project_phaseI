@@ -137,7 +137,7 @@ def get_network_size(net):
 
 
 def main():
-    pickle = 'best-network.pkl'
+    pickle = str(sys.argv[3])
     print "Getting network.... "
     net = cPickle.load(open(pickle, 'rb'))
     size = get_network_size(net)
