@@ -132,13 +132,21 @@ class Pyramid:
         cv2.waitKey(1)
         # time.sleep(0.00001)
 
+def get_network_size(net):
+    return net.layers[0].image_shape[2]
+
 
 def main():
     pickle = 'best-network.pkl'
+    print "Getting network.... "
+    net = cPickle.load(open(pickle, 'rb'))
+    size = get_network_size(net)
+    print "Network size = %s" % size
     image_path = str(sys.argv[1])
     gt = str(sys.argv[2])
-    classifier = CraterClassifier(pickle)
-    pyramid = Pyramid(image_path, 10, 101, gt, classifier)
+    classifier = CraterClassifier(net)
+    print "Running the pyramid..."
+    pyramid = Pyramid(image_path, 10, size, gt, classifier)
     drawing_data = pyramid.runPyramid()
     cPickle.dump(pyramid.hitlist,open(DRAWING_DATA_OUT, 'wb'))
 

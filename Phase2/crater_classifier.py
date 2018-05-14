@@ -8,10 +8,10 @@ NOT_CRATER = 0
 
 class CraterClassifier(object):
 
-    def __init__(self, network_pickle):
+    def __init__(self, net):
         """ Makes an object that takes a list of images and classifies
             them as either craters or non-craters. """
-        self.network = cPickle.load(open(network_pickle, 'rb'))
+        self.network = net
 
 
     def shared(self, data):
