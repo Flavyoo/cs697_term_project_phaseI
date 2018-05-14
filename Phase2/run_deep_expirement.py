@@ -25,5 +25,5 @@ def main():
 
 if __name__ == "__main__":
   # Make sure crater pickle is there
-  os.system('rm Pickles/*.pkl')
+  #os.system('rm Pickles/*.pkl')
   main()

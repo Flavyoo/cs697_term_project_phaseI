@@ -72,7 +72,7 @@ if GPU:
     except: pass # it's already set
     theano.config.floatX = 'float32'
 else:
-    print "Running with a CPU.  If this is not desired, then the modify "+\
+    print "Running with a CPU.  If this is not desired, then modify "+\
         "network3.py to set\nthe GPU flag to True."
 
 #### Load the MNIST data

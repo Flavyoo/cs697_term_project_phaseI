@@ -57,7 +57,7 @@ class Pyramid:
                 yield (x, y, self.pyramid_image[y:y + self.swz, x:x + self.swz])
 
     def pyramid(self, minSize=(30, 30),start=(-6),end=6):
-        for s in range(start,end, 1):
+        for s in range(start, end, 1):
             w = int(self.original_width * math.exp(SCALE * s))
             self.pyramid_image = imutils.resize(self.original_image, width=w)
             self.height = self.pyramid_image.shape[1]
@@ -80,6 +80,7 @@ class Pyramid:
                 if x + self.swz <= clone.shape[0] and y + self.swz <= clone.shape[1]:
                     count += 1
                     cv2.rectangle(clone, (x, y), (x + self.swz, y + self.swz), YELLOW, 3)
+                    # calculate the center point of the sliding window
                     center_point_x = (self.swz / 2) + x
                     center_point_y = (self.swz / 2) + y
                     true_scale = float(scaled_size)/self.original_width
@@ -91,11 +92,13 @@ class Pyramid:
                         images = np.append(images, image, axis=0)
                     centerpoints += [(center_point_x,center_point_y)]
                     scales += [true_scale]
+                    # classify 500 images at a time
                     if count % 500 == 0:
                         tp, fp = self.classify_imgs(images, centerpoints, scales)
                         print "Found: TP's: %s" % tp
                         print "       FP's: %s" % fp
                         print
+                        # reset everything
                         images, centerpoints, scales = [], [], []
                     self.display(clone)
             self.classify_imgs(images, centerpoints, scales)
@@ -119,14 +122,13 @@ class Pyramid:
             cv2.circle(img, (hit.x, hit.y), self.swz/2,RED,1)
         return img
 
-    def crop(self, x,y,size,image):
+    def crop(self,x,y,size,image):
         image = image[y:y+size, x:x+size]
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         image = cv2.normalize(image.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
         image.astype(np.float32)
         return image
 
-<<<<<<< HEAD
     def shared(self, data):
         """Place the data into shared variables.  This allows Theano to copy
         the data to the GPU, if one is available.
@@ -134,7 +136,7 @@ class Pyramid:
         shared_x = theano.shared(
             np.asarray(data, dtype=theano.config.floatX), borrow=True)
         return shared_x
-=======
+
     def display(self, img):
         self.plot_hits(img)
         cv2.imshow("Window", img)
@@ -144,9 +146,11 @@ class Pyramid:
 def get_network_size(net):
     return net.layers[0].image_shape[2]
 
->>>>>>> ac14d721b2a792f9e3de3a113d4db1db5c9ac4b4
-
 def main():
+    """
+    currently images are getting classified multipple times. We should save
+    locations and check them before classifications.
+    """
     pickle = str(sys.argv[3])
     print "Getting network.... "
     net = cPickle.load(open(pickle, 'rb'))
