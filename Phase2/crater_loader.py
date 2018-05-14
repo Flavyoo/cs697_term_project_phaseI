@@ -46,7 +46,7 @@ def load_crater_data_phaseII_wrapper(filename, size):
 
     training_data = shuffle_data(training_data, size)
     validation_data = shuffle_data(validation_data, size)
-    test_data = shuffle_data(test_data, size)
+    #test_data = shuffle_data(test_data, size)
 
     #print (training_data[0][0][0].__class__.__name__)
     #print (training_data[1][0].__class__.__name__)
@@ -66,12 +66,12 @@ def load_crater_data_phaseII_wrapper(filename, size):
 def shuffle_data(data, size):
     data_input = [np.reshape(x, (size * size)) for x in data[0]]
     tup = zip(data_input, data[1])
-    random.shuffle(tup)
+    np.random.shuffle(tup)
     sep_x = [element[0] for element in tup]
     sep_y = [element[1] for element in tup]
 
     return (np.asarray(sep_x), sep_y)
 
 if __name__ == '__main__':
-    training_data, validation_data, test_data = load_crater_data_phaseII_wrapper("non_rotated_28x28.pkl", 28)
+    training_data, validation_data, test_data = load_crater_data_phaseII_wrapper("101x101.pkl", 101)
     print training_data[0]
