@@ -41,15 +41,15 @@ def load_crater_data_phaseII_wrapper(filename, size):
     training_data, validation_data, test_data = cPickle.load(my_file)
     my_file.close()
 
-    #print (training_data[0][0][0].__class__.__name__)
-    #print (training_data[1][0].__class__.__name__)
-
     training_data = shuffle_data(training_data, size)
     validation_data = shuffle_data(validation_data, size)
+<<<<<<< HEAD
     #test_data = shuffle_data(test_data, size)
 
     #print (training_data[0][0][0].__class__.__name__)
     #print (training_data[1][0].__class__.__name__)
+=======
+>>>>>>> ac14d721b2a792f9e3de3a113d4db1db5c9ac4b4
 
     def shared(data):
         """Place the data into shared variables.  This allows Theano to copy

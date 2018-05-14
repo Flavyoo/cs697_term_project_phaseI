@@ -15,7 +15,7 @@ import crater_loader
 from plotdatafitting import plotDataFit
 IMAGE_SIZE = 101
 
-EPOCHS = 15
+EPOCHS = 1
 MB_SIZE = 1
 ETA = .005
 RUNS = 1
@@ -34,14 +34,14 @@ def leakyrelu():
         print "num %s, leaky relu, with regularization %s" % (j, 0.00001)
         net = Network([
             ConvPoolLayer(image_shape=(MB_SIZE, 1, IMAGE_SIZE, IMAGE_SIZE),
-                          filter_shape=(5, 1, 12, 12),
+                          filter_shape=(5, 1, 15, 15),
                           poolsize=(3, 3),
                           activation_fn=LReLU),
-            ConvPoolLayer(image_shape=(MB_SIZE, 5, 30, 30),
+            ConvPoolLayer(image_shape=(MB_SIZE, 5, 29, 29),
                           filter_shape=(10, 5, 3, 3),
                           poolsize=(2, 2),
                           activation_fn=LReLU),
-            FullyConnectedLayer(n_in=10*14*14, n_out=200, activation_fn=LReLU),
+            FullyConnectedLayer(n_in=10*13*13, n_out=200, activation_fn=LReLU),
             FullyConnectedLayer(n_in=200, n_out=200, activation_fn=LReLU),
             FullyConnectedLayer(n_in=200, n_out=100, activation_fn=LReLU),
             SoftmaxLayer(n_in=100, n_out=2)], MB_SIZE)
@@ -69,8 +69,9 @@ def elu():
     return net
 
 def run_experiments():
-    # leakyrelu()
-    elu()
-    validation_accuracies = net.validation_accuracies
-    test_accuracies = net.test_accuracies
-    plotDataFit(test_accuracies, validation_accuracies)
+    #net = leakyrelu()
+    net = elu()
+    print net.test_mb_predictions(0)
+    # validation_accuracies = net.validation_accuracies
+    # test_accuracies = net.test_accuracies
+    # plotDataFit(test_accuracies, validation_accuracies)

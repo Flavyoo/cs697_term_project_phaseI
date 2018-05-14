@@ -10,11 +10,21 @@ import math
 from craters import *
 from crater_classifier import *
 import numpy as np
-import theano.tensor as T
-import theano
+import cPickle
+
+START = -1
+END   =  3
+SCALE = .65
+
+DRAWING_DATA_OUT = "HitData/hit_data.pkl"
+GREEN = (0,255,0)
+YELLOW = (0,255,255)
+RED = (0,0,255)
+
+#count = 0
 
 class Pyramid:
-    def __init__(self, image_file_path, step_size, swz, files):
+    def __init__(self, image_file_path, step_size, swz, gt, classifier):
         self.pyramid_image = cv2.imread(image_file_path)
         self.original_image = cv2.imread(image_file_path)
         self.image_shape = self.pyramid_image.shape
@@ -25,18 +35,13 @@ class Pyramid:
         self.width = self.image_shape[1]
         self.swz = swz
         self.step_size = step_size;
-        self.scale = 1.5
-        self.crater_list_3_24 = CraterList()
-        self.crater_list_3_25 = CraterList()
-        with open(files[0], 'rb') as file:
+        self.GTs = CraterList()
+        with open(gt, 'rb') as file:
             for row in file:
                 entry = map(int, row.strip('\n').split(','))
-                self.crater_list_3_24.add(entry[:2], entry[2])
-
-        with open(files[1], 'rb') as file:
-            for row in file:
-                entry = map(int, row.strip('\n').split(','))
-                self.crater_list_3_25.add(entry[:2], entry[2])
+                self.GTs.add(entry[:2], entry[2])
+        self.classifier = classifier
+        self.hitlist = []
 
 
 
@@ -51,10 +56,9 @@ class Pyramid:
             for x in xrange(0, self.width, self.step_size):
                 yield (x, y, self.pyramid_image[y:y + self.swz, x:x + self.swz])
 
-    def pyramid(self, scale=1.5, minSize=(30, 30)):
-        self.scale = scale
-        for s in range(-6, 6, 2):
-            w = int(self.original_width * math.pow(scale, s))
+    def pyramid(self, minSize=(30, 30),start=(-6),end=6):
+        for s in range(start,end, 1):
+            w = int(self.original_width * math.exp(SCALE * s))
             self.pyramid_image = imutils.resize(self.original_image, width=w)
             self.height = self.pyramid_image.shape[1]
             self.width = self.pyramid_image.shape[0]
@@ -62,43 +66,67 @@ class Pyramid:
             #    break
             yield self.pyramid_image
 
-    def runPyramid(self, pickle):
-        #layer_image_results = []
-        for resized in self.pyramid():
-            image_data = [[], [], 1.5, []]
+    def runPyramid(self):
+        for resized in self.pyramid(start=START, end=END):
+            print "\n\n---------------------------------------------"
+            hits = CraterHitList(self.original_width, self.swz, self.GTs)
+            self.hitlist.append(hits)
+            images, centerpoints, scales = [], [], []
+            scaled_size = resized.shape[0]
+            count = 0
             for (x, y, window) in self.slidingWindow():
                 clone = resized.copy()
                 clone1 = resized.copy()
                 if x + self.swz <= clone.shape[0] and y + self.swz <= clone.shape[1]:
-                    cv2.rectangle(clone, (x, y), (x + self.swz, y + self.swz), (0, 255, 255), 3)
+                    count += 1
+                    cv2.rectangle(clone, (x, y), (x + self.swz, y + self.swz), YELLOW, 3)
                     center_point_x = (self.swz / 2) + x
                     center_point_y = (self.swz / 2) + y
-                    if len(image_data[0]) == 0:
-                        image = self.crop(x, y, self.swz, self.swz, clone1)
-                        image_data[0] = np.reshape(image, (1, self.swz * self.swz))
-                        image_data[1] += [(center_point_y,center_point_x)]
-                        image_data[3] += [clone.shape[0]]
+                    true_scale = float(scaled_size)/self.original_width
+                    image = self.crop(x, y, self.swz, clone1)
+                    if len(images) == 0:
+                        images = np.reshape(image, (1, self.swz * self.swz))
                     else:
-                        image = self.crop(x, y, self.swz, self.swz, clone1)
                         image = np.reshape(image, (1, self.swz * self.swz))
-                        image_data[0] = np.append(image_data[0], image, axis=0)
-                        image_data[1] += [(center_point_y,center_point_x)]
-                        image_data[3] += [clone.shape[0]]
-                    cv2.imshow("Window", clone)
-                    cv2.waitKey(1)
-                    time.sleep(0.025)
-            classifier = CraterClassifier(pickle, self.shared(image_data[0]))
-            classifications = classifier.get_classifications()
-            #print classifications
-        return image_data
+                        images = np.append(images, image, axis=0)
+                    centerpoints += [(center_point_x,center_point_y)]
+                    scales += [true_scale]
+                    if count % 500 == 0:
+                        tp, fp = self.classify_imgs(images, centerpoints, scales)
+                        print "Found: TP's: %s" % tp
+                        print "       FP's: %s" % fp
+                        print
+                        images, centerpoints, scales = [], [], []
+                    self.display(clone)
+            self.classify_imgs(images, centerpoints, scales)
+            filename = 'Detection_Imgs/scaled-%sx%s.jpg' % (scaled_size, scaled_size)
+            print 'Writing out image -- %s' % filename
+            cv2.imwrite(filename, self.plot_hits(resized))
 
-    def crop(self, x,y,w,h,image):
-        image = image[x:x+w, y:y+h]
+
+
+    def classify_imgs(self, images, centerpoints, scales):
+        classifications = self.classifier.get_classifications(images)
+        query = (images, centerpoints, scales, classifications)
+        return self.hitlist[-1].add_hits(query)
+
+    def plot_hits(self, img):
+        tps = self.hitlist[-1].get_TP_hits()
+        fps = self.hitlist[-1].get_FP_hits()
+        for hit in tps:
+            cv2.circle(img, (hit.x, hit.y), self.swz/2,GREEN,1)
+        for hit in fps:
+            cv2.circle(img, (hit.x, hit.y), self.swz/2,RED,1)
+        return img
+
+    def crop(self, x,y,size,image):
+        image = image[y:y+size, x:x+size]
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         image = cv2.normalize(image.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
         image.astype(np.float32)
         return image
 
+<<<<<<< HEAD
     def shared(self, data):
         """Place the data into shared variables.  This allows Theano to copy
         the data to the GPU, if one is available.
@@ -106,12 +134,31 @@ class Pyramid:
         shared_x = theano.shared(
             np.asarray(data, dtype=theano.config.floatX), borrow=True)
         return shared_x
+=======
+    def display(self, img):
+        self.plot_hits(img)
+        cv2.imshow("Window", img)
+        cv2.waitKey(1)
+        # time.sleep(0.00001)
+
+def get_network_size(net):
+    return net.layers[0].image_shape[2]
+
+>>>>>>> ac14d721b2a792f9e3de3a113d4db1db5c9ac4b4
 
 def main():
-    pickle = 'Pickles/leaky-ntwk-e0-val0.9741-tst0.9643.pkl'
+    pickle = str(sys.argv[3])
+    print "Getting network.... "
+    net = cPickle.load(open(pickle, 'rb'))
+    size = get_network_size(net)
+    print "Network size = %s" % size
     image_path = str(sys.argv[1])
-    pyramid = Pyramid(image_path, 10, 101, ['gt_tile3_24.csv', 'gt_tile3_25.csv'])
-    pyramid.runPyramid(pickle)
+    gt = str(sys.argv[2])
+    classifier = CraterClassifier(net)
+    print "Running the pyramid..."
+    pyramid = Pyramid(image_path, 10, size, gt, classifier)
+    drawing_data = pyramid.runPyramid()
+    cPickle.dump(pyramid.hitlist,open(DRAWING_DATA_OUT, 'wb'))
 
 if __name__ == '__main__':
     main()

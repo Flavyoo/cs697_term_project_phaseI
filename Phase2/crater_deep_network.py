@@ -11,9 +11,9 @@ from plotdatafitting import plotDataFit
 import crater_loader
 # uncomment if you do not want graph to show up.
 IMAGE_SIZE = 101
-EPOCHS = 2
+EPOCHS = 20
 MB_SIZE = 1
-ETA = .005
+ETA = .0075
 RUNS = 1
 LAMBDA_LENGTH = 1
 
@@ -33,18 +33,18 @@ def leakyrelu():
         print "num %s, leaky relu, with regularization %s" % (j, 0.00001)
         net = Network([
             ConvPoolLayer(image_shape=(MB_SIZE, 1, IMAGE_SIZE, IMAGE_SIZE),
-                          filter_shape=(5, 1, 12, 12),
+                          filter_shape=(5, 1, 15, 15),
                           poolsize=(3, 3),
                           activation_fn=LReLU),
-            ConvPoolLayer(image_shape=(MB_SIZE, 5, 30, 30),
-                          filter_shape=(10, 5, 3, 3),
+            ConvPoolLayer(image_shape=(MB_SIZE, 5, 29, 29),
+                          filter_shape=(10, 5, 2, 2),
                           poolsize=(2, 2),
                           activation_fn=LReLU),
             FullyConnectedLayer(n_in=10*14*14, n_out=200, activation_fn=LReLU),
             FullyConnectedLayer(n_in=200, n_out=200, activation_fn=LReLU),
             FullyConnectedLayer(n_in=200, n_out=100, activation_fn=LReLU),
             SoftmaxLayer(n_in=100, n_out=2)], MB_SIZE)
-        net.SGD("leaky", training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=0.00001)
+        net.SGD("leaky", training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=0.001)
         total_validation_accuracies.append(net.validation_accuracies)
         total_test_accuracies.append(net.test_accuracies)
     return net
@@ -78,4 +78,4 @@ def run_experiments():
     net = leakyrelu()
     tta = flattenArray(total_test_accuracies)
     tva = flattenArray(total_validation_accuracies)
-    #plotDataFit(tta, tva, len(tta), 1, "leakyrelu_20Epochs");
+    plotDataFit(tta, tva, len(tta), 1, "LReLU_20Epochs-0075");
