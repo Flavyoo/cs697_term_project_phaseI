@@ -15,8 +15,8 @@ import crater_loader
 from plotdatafitting import plotDataFit
 IMAGE_SIZE = 101
 
-EPOCHS = 15
-MB_SIZE = 3
+EPOCHS = 1
+MB_SIZE = 1
 ETA = .005
 RUNS = 1
 
@@ -70,7 +70,8 @@ def elu():
 
 def run_experiments():
     #net = leakyrelu()
-    elu()
+    net = elu()
+    print net.test_mb_predictions(0)
     # validation_accuracies = net.validation_accuracies
     # test_accuracies = net.test_accuracies
     # plotDataFit(test_accuracies, validation_accuracies)
