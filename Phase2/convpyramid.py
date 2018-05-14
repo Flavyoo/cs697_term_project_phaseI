@@ -102,7 +102,6 @@ class Pyramid:
     def shared(self, data):
         """Place the data into shared variables.  This allows Theano to copy
         the data to the GPU, if one is available.
-
         """
         shared_x = theano.shared(
             np.asarray(data, dtype=theano.config.floatX), borrow=True)
