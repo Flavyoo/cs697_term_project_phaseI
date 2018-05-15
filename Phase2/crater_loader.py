@@ -43,6 +43,13 @@ def load_crater_data_phaseII_wrapper(filename, size):
 
     training_data = shuffle_data(training_data, size)
     validation_data = shuffle_data(validation_data, size)
+<<<<<<< HEAD
+    #test_data = shuffle_data(test_data, size)
+
+    #print (training_data[0][0][0].__class__.__name__)
+    #print (training_data[1][0].__class__.__name__)
+=======
+>>>>>>> ac14d721b2a792f9e3de3a113d4db1db5c9ac4b4
 
     def shared(data):
         """Place the data into shared variables.  This allows Theano to copy
@@ -66,5 +73,5 @@ def shuffle_data(data, size):
     return (np.asarray(sep_x), sep_y)
 
 if __name__ == '__main__':
-    training_data, validation_data, test_data = load_crater_data_phaseII_wrapper("non_rotated_28x28.pkl", 28)
+    training_data, validation_data, test_data = load_crater_data_phaseII_wrapper("101x101.pkl", 101)
     print training_data[0]
