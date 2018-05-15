@@ -12,9 +12,9 @@ from crater_classifier import *
 import numpy as np
 import cPickle
 
-START = -1
-END   =  3
-SCALE = .65
+START = -4
+END   =  1
+SCALE = .657
 
 DRAWING_DATA_OUT = "HitData/hit_data.pkl"
 GREEN = (0,255,0)
