@@ -51,7 +51,7 @@ def ReLU(z): return T.maximum(0.0, z)
 #Leaky ReLU returns a * z for negative numbers, thus allowing for non-zero values and avoids
 #the chance of dead neurons
 def LReLU(z):
-    a = .0001
+    a = .00001
     return T.nnet.relu(z, a)
 
 #Exponential LU returns a * (e^z - 1) for negative numbers

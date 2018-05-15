@@ -12,9 +12,9 @@ from crater_classifier import *
 import numpy as np
 import cPickle
 
-START = -1
-END   =  3
-SCALE = .65
+START = -4
+END   =  1
+SCALE = .657
 
 DRAWING_DATA_OUT = "HitData/hit_data.pkl"
 GREEN = (0,255,0)
@@ -159,6 +159,10 @@ class Pyramid:
         image.astype(np.float32)
         return image
 
+<<<<<<< HEAD:Phase2/convpyramid.py
+=======
+
+>>>>>>> 45aa9e2de8c14eb76f15c986340bab9c1613d8dd:Phase2/crater_slice_winodw.py
     def shared(self, data):
         """Place the data into shared variables.  This allows Theano to copy
         the data to the GPU, if one is available.
@@ -181,6 +185,11 @@ class Pyramid:
 def get_network_size(net):
     return net.layers[0].image_shape[2]
 
+<<<<<<< HEAD:Phase2/convpyramid.py
+=======
+
+
+>>>>>>> 45aa9e2de8c14eb76f15c986340bab9c1613d8dd:Phase2/crater_slice_winodw.py
 def main():
     """
     currently images are getting classified multipple times. We should save
