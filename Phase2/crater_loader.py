@@ -12,6 +12,12 @@ After the file is read, each image from the data set is turned into a column vec
 and put into a tuple consisting of the image itself, and its label. This is done for
 the test and the training data. The final values are then returned.
 
+Phase II--
+load_crater_data_phaseII_wrapper(filename, size):
+The training set consists of 70% of the crater and 70% of the non-crater images, and the test
+
+test and validation set consist of 15% of of the crater and 15% of the non-crater images
+
 """
 
 import cPickle

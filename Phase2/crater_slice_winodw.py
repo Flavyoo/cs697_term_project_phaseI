@@ -126,7 +126,7 @@ class Pyramid:
         image.astype(np.float32)
         return image
 
-<<<<<<< HEAD
+
     def shared(self, data):
         """Place the data into shared variables.  This allows Theano to copy
         the data to the GPU, if one is available.
@@ -134,7 +134,7 @@ class Pyramid:
         shared_x = theano.shared(
             np.asarray(data, dtype=theano.config.floatX), borrow=True)
         return shared_x
-=======
+
     def display(self, img):
         self.plot_hits(img)
         cv2.imshow("Window", img)
@@ -144,7 +144,7 @@ class Pyramid:
 def get_network_size(net):
     return net.layers[0].image_shape[2]
 
->>>>>>> ac14d721b2a792f9e3de3a113d4db1db5c9ac4b4
+
 
 def main():
     pickle = str(sys.argv[3])
