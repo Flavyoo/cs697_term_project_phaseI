@@ -106,6 +106,7 @@ class Network(object):
         self.mini_batch_size = mini_batch_size
         self.validation_accuracies = []
         self.test_accuracies = []
+        self.cost = []
         self.params = [param for layer in self.layers for param in layer.params]
         # create a matrix with the name 'x'
         self.x = T.matrix("x")
@@ -185,6 +186,7 @@ class Network(object):
                 if iteration % 1000 == 0:
                     print("Training mini-batch number {0}".format(iteration))
                 cost_ij = train_mb(minibatch_index)
+                self.cost.append(cost_ij)
                 # ran through all the minibatches for this iteration ie, epochs,
                 # so then we can compute the validation accuracy
                 if (iteration+1) % num_training_batches == 0:

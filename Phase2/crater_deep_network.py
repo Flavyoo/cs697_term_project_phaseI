@@ -7,11 +7,11 @@ import cPickle
 import theano
 import theano.tensor as T
 from network3 import *
-from plotdatafitting import plotDataFit
+from plotdatafitting import plotDataFit, plotData
 import crater_loader
 # uncomment if you do not want graph to show up.
 IMAGE_SIZE = 101
-EPOCHS = 25
+EPOCHS = 20
 MB_SIZE = 1
 ETA = .00075
 RUNS = 1
@@ -25,6 +25,7 @@ training_data, validation_data, test_data = \
 crater_loader.load_crater_data_phaseII_wrapper("101x101.pkl", 101)
 total_validation_accuracies = []
 total_test_accuracies = []
+total_cost_accuracies = []
 
 
 def leakyrelu():
@@ -47,6 +48,7 @@ def leakyrelu():
         net.SGD("leaky0075_35", training_data, EPOCHS, MB_SIZE, ETA, validation_data, test_data, lmbda=0.001)
         total_validation_accuracies.append(net.validation_accuracies)
         total_test_accuracies.append(net.test_accuracies)
+        total_cost_accuracies.append(net.cost)
     return net
 
 
@@ -102,7 +104,9 @@ def flattenArray(two_d):
     return [element for array in two_d for element in array]
 
 def run_experiments():
-    net = leakyrelu28x28()
+    net = leakyrelu()
     tta = flattenArray(total_test_accuracies)
     tva = flattenArray(total_validation_accuracies)
-    plotDataFit(tta, tva, len(tta), 1, "LReLU_28x28_25_Epochs-0075");
+    tca = flattenArray(total_cost_accuracies)
+    plotDataFit(tta, tva, len(tta), 1, "LReLU_101x101_25_Epochs-0075");
+    plotData(len(tca), tca, 1, "Cost", "LReLU_101x101_25_Epochs_Cost-0075")
