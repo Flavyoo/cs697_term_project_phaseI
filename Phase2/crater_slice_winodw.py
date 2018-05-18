@@ -45,8 +45,6 @@ class Pyramid:
         self.hitlist = []
 
 
-
-
     def slidingWindow(self):
         """
         Create an n x n window that moves across the big image creating smaller
@@ -151,7 +149,7 @@ class Pyramid:
         for hit in fps:
             cv2.circle(img, (hit.x, hit.y), self.swz/2,RED,1)
         return img
-        
+
     def crop(self,x,y,size,image):
         image = image[y:y+size, x:x+size]
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -159,10 +157,6 @@ class Pyramid:
         image.astype(np.float32)
         return image
 
-<<<<<<< HEAD:Phase2/convpyramid.py
-=======
-
->>>>>>> 45aa9e2de8c14eb76f15c986340bab9c1613d8dd:Phase2/crater_slice_winodw.py
     def shared(self, data):
         """Place the data into shared variables.  This allows Theano to copy
         the data to the GPU, if one is available.
@@ -181,15 +175,10 @@ class Pyramid:
         return imutils.resize(img, width=w, height=w)
 
 
-
 def get_network_size(net):
     return net.layers[0].image_shape[2]
 
-<<<<<<< HEAD:Phase2/convpyramid.py
-=======
 
-
->>>>>>> 45aa9e2de8c14eb76f15c986340bab9c1613d8dd:Phase2/crater_slice_winodw.py
 def main():
     """
     currently images are getting classified multipple times. We should save
