@@ -1,26 +1,25 @@
+from plotdatafitting import plotDataFit, plotData
 from collections import Counter
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import numpy as np
-import cPickle
-import theano
 import theano.tensor as T
 from network3 import *
-from plotdatafitting import plotDataFit, plotData
+matplotlib.use('Agg')
 import crater_loader
-# uncomment if you do not want graph to show up.
-IMAGE_SIZE = 28
+import numpy as np
+import matplotlib
+import cPickle
+import theano
+
+IMAGE_SIZE = 101
 EPOCHS = 50
 MB_SIZE = 1
 ETA = .00075
-#ETA = .0005
 RUNS = 1
 LAMBDA_LENGTH = 1
 
 PICKLE = "Pickles/elu-network%sx%s" % (IMAGE_SIZE, IMAGE_SIZE)
 training_data, validation_data, test_data = \
-crater_loader.load_crater_data_phaseII_wrapper("non_rotated_28x28.pkl", IMAGE_SIZE)
+crater_loader.load_crater_data_phaseII_wrapper("101x101.pkl", IMAGE_SIZE)
 total_validation_accuracies = []
 total_test_accuracies = []
 total_cost_accuracies = []

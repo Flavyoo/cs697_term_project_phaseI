@@ -1,6 +1,6 @@
 """
 craterLoader.py
-Flavio Andrade, Nikith AnupKumar
+Flavio Andrade, Nikith AnupKumar, Garrett Alston, Euclides Barahona
 4-16-18
 
 This program reads a pickle file containing training and test data.
@@ -61,6 +61,7 @@ def load_crater_data_phaseII_wrapper(filename, size):
             np.asarray(data[1], dtype=theano.config.floatX), borrow=True)
         return shared_x, T.cast(shared_y, "int32")
     return [shared(training_data), shared(validation_data), shared(test_data)]
+
 
 def shuffle_data(data, size):
     data_input = [np.reshape(x, (size * size)) for x in data[0]]

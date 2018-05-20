@@ -1,3 +1,7 @@
+"""
+5-12-18 Flavio Andrade, Nikith AnupKumar, Garret Alston
+"""
+
 import argparse
 import time
 import cv2

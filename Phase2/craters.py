@@ -1,3 +1,5 @@
+"5-12-18 Garrett Alston"
+
 from math import pow
 from crater_classifier import Hit
 
@@ -25,7 +27,6 @@ class Crater(object):
         radius = (float(hit.radius) / hit.scale) * .5
         range = Circle([x,y], radius)
         return self.circle.intersects(range)
-
 
 class CraterList(object):
 

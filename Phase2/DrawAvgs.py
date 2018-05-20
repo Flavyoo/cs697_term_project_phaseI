@@ -1,3 +1,7 @@
+"""
+Garrett Alston,
+"""
+
 import cPickle
 import imutils
 import cv2

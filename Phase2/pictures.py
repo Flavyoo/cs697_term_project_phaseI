@@ -1,3 +1,7 @@
+"""
+5-12-18 Garrett Alston,
+"""
+
 import cv2 as cv
 import cPickle
 import numpy as np
